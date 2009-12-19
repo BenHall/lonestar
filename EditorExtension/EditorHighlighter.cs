@@ -1,6 +1,8 @@
+using System.Collections.Generic;
 using System.Windows.Controls;
 using System.Windows.Media;
 using Meerkatalyst.Lonestar.EditorExtension.LineResultMarkers;
+using Meerkatalyst.Lonestar.EditorExtension.ResultAdapter;
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.VisualStudio.Text.Formatting;
@@ -18,37 +20,24 @@ namespace Meerkatalyst.Lonestar.EditorExtension
             _layer = view.GetAdornmentLayer("EditorHighlighter");
 
             //Listen to any event that changes the layout (text changes, scrolling, etc)
-            _view.LayoutChanged += OnLayoutChanged;
+            //_view.LayoutChanged += OnLayoutChanged;
         }
 
         private void OnLayoutChanged(object sender, TextViewLayoutChangedEventArgs e)
         {
             foreach (ITextViewLine line in e.NewOrReformattedLines)
             {
-                this.CreateVisuals(line);
+                CreateVisuals(line, new Fail());
             }
         }
 
-        private void CreateVisuals(ITextViewLine line)
+        private void CreateVisuals(ITextViewLine line, LineResultMarker resultMarker)
         {
             int start = line.Start;
             int end = line.End;
 
-            for (int i = start; (i < end); ++i)
-            {
-                SnapshotSpan span = new SnapshotSpan(_view.TextSnapshot, Span.FromBounds(start, end));
-                if (span.GetText().Trim().StartsWith("Feature"))
-                {
-                    HighlightLine(span, new Fail());
-                }
-                else if (span.GetText().Trim().StartsWith("Scenario"))
-                {
-                    HighlightLine(span, new Pass());
-                }
-                else {
-                    HighlightLine(span, new Pending());
-                }
-            }
+            SnapshotSpan span = new SnapshotSpan(_view.TextSnapshot, Span.FromBounds(start, end));
+            HighlightLine(span, resultMarker);
         }
 
         private void HighlightLine(SnapshotSpan span, LineResultMarker marker)
@@ -72,6 +61,54 @@ namespace Meerkatalyst.Lonestar.EditorExtension
 
                 _layer.AddAdornment(AdornmentPositioningBehavior.TextRelative, span, null, image, null);
             }
+        }
+
+        public static EditorHighlighter Instance { get; set; }
+        //TODO: Use MEF!
+        public static void Create(IWpfTextView textView)
+        {
+            if (Instance == null)
+                Instance = new EditorHighlighter(textView);
+        }
+
+        public void UpdateUI(List<FeatureResult> featureResults)
+        {
+            foreach (FeatureResult featureResult in featureResults)
+            {
+                foreach (ScenarioResult scenarioResult in featureResult.ScenarioResults)
+                {
+                    HighlightStepsWithResults(scenarioResult);
+                }
+            }
+
+        }
+
+        private void HighlightStepsWithResults(ScenarioResult scenarioResult)
+        {
+            foreach (StepResult stepResult in scenarioResult.StepResults)
+            {
+                foreach (ITextViewLine line in _view.TextViewLines)
+                {
+                    if(line.Snapshot.GetText().Equals(stepResult.Name))
+                    {
+                        LineResultMarker resultMarker = GetResultMarker(stepResult.Result);
+                        CreateVisuals(line, resultMarker);
+                    }
+                }
+            }
+        }
+
+        private LineResultMarker GetResultMarker(string result)
+        {
+            switch (result)
+            {
+                case "passed":
+                    return new Pass();
+                case "failed":
+                    return new Fail();
+            }
+
+            return new Pending();
         }
     }
 }
