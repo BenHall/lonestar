@@ -1,0 +1,75 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<CommandTable xmlns="http://schemas.microsoft.com/VisualStudio/2005-10-18/CommandTable" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <!--This is the file that defines the IDs for all the commands exposed by VisualStudio. -->
+  <Extern href="stdidcmd.h"/>
+
+  <!--This header contains the command ids for the menus provided by the shell. -->
+  <Extern href="vsshlids.h"/>
+
+  <!--Definition of some VSCT specific constants. In this sample we use it for the IDs inside the guidOfficeIcon group. -->
+  <Extern href="msobtnid.h"/>
+
+  <Commands package="guidLonestarPkg">
+    <Groups>
+      <Group guid="guidLonestarCmdSet" id="MyMenuGroup" priority="0x0600">
+        <Parent guid="guidLonestarCmdSet" id="TopLevelMenu"/>
+      </Group>
+    </Groups>
+    <Menus>
+      <Menu guid="guidLonestarCmdSet" id="TopLevelMenu" priority="0x100" type="Menu">
+        <Parent guid="guidSHLMainMenu" id="IDG_VS_MM_TOOLSADDINS" />
+        <Strings>
+          <ButtonText>Meerkatalyst</ButtonText>
+          <CommandName>Meerkatalyst</CommandName>
+        </Strings>
+      </Menu>
+    </Menus>
+    <Buttons>
+      <Button guid="guidLonestarCmdSet" id="runLonestar" priority="0x0100" type="Button">
+        <Parent guid="guidLonestarCmdSet" id="MyMenuGroup" />
+        <Icon guid="guidImages" id="bmpPic1" />
+        <Strings>
+          <CommandName>runLonestar</CommandName>
+          <ButtonText>Run Lonestar</ButtonText>
+        </Strings>
+      </Button>
+
+      <Button guid="guidLonestarCmdSet" id="resultsWindow" priority="0x0100" type="Button">
+        <Parent guid="guidLonestarCmdSet" id="MyMenuGroup" />
+        <Icon guid="guidImages" id="bmpPic2" />
+        <Strings>
+          <CommandName>resultsWindow</CommandName>
+          <ButtonText>Lonestar Results Window</ButtonText>
+        </Strings>
+      </Button>
+
+
+    </Buttons>
+   
+    <Bitmaps>
+      <Bitmap guid="guidImages" href="Resources\Images_32bit.bmp" usedList="bmpPic1, bmpPic2, bmpPicSearch, bmpPicX, bmpPicArrows"/>
+    </Bitmaps>
+  </Commands>
+
+  <Symbols>
+    <!-- This is the package guid. -->
+    <GuidSymbol name="guidLonestarPkg" value="{3535861c-f434-4192-bb72-11c9aa2eaeef}" />
+    
+    <!-- This is the guid used to group the menu commands together -->
+    <GuidSymbol name="guidLonestarCmdSet" value="{1d970849-b148-442a-91ef-b8baa4f6cf18}">
+      <IDSymbol name="TopLevelMenu" value="0x1010" />
+      <IDSymbol name="MyMenuGroup" value="0x1020" />
+      <IDSymbol name="runLonestar" value="0x0100" />
+      <IDSymbol name="resultsWindow" value="0x0101" />
+    </GuidSymbol>
+    
+    <GuidSymbol name="guidImages" value="{8b7e6c7a-7662-4e56-a6ef-b71797b51561}" >
+      <IDSymbol name="bmpPic1" value="1" />
+      <IDSymbol name="bmpPic2" value="2" />
+      <IDSymbol name="bmpPicSearch" value="3" />
+      <IDSymbol name="bmpPicX" value="4" />
+      <IDSymbol name="bmpPicArrows" value="5" />
+    </GuidSymbol>
+  </Symbols>
+
+</CommandTable>
