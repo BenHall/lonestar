@@ -13,7 +13,8 @@
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SignAssembly>true</SignAssembly>
-    <AssemblyOriginatorKeyFile>Key.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>
+    </AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -80,6 +81,9 @@
     <Compile Include="LineResultMarkers\Pending.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ResultAdapter\ConvertOutputToObjectModel.cs" />
+    <Compile Include="ResultAdapter\ResultModels\FeatureResult.cs" />
+    <Compile Include="ResultAdapter\ResultModels\ScenarioResult.cs" />
+    <Compile Include="ResultAdapter\ResultModels\StepResult.cs" />
     <Compile Include="TextChangedListener.cs" />
     <Compile Include="EditorHighlighter.cs" />
     <Compile Include="TextViewCreationListener.cs" />
@@ -88,9 +92,6 @@
     <Content Include="Formatters\basic_info.rb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Key.snk" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System.Data;
+using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 
@@ -17,7 +18,7 @@ namespace Meerkatalyst.Lonestar.EditorExtension.Execution
 
         public string Execute()
         {
-            string result = Start(@"C:\Ruby\bin\cucumber.bat", GetArguments());
+            string result = Start(GetRubyInterpreter(), GetArguments());
 
             return result;
         }
@@ -33,12 +34,14 @@ namespace Meerkatalyst.Lonestar.EditorExtension.Execution
 
         private string GetResult(Process process)
         {
-            string result;
-            using (StreamReader reader = process.StandardOutput)
-            {
-                process.WaitForExit();
-                result = reader.ReadToEnd();
-            }
+            StreamReader reader = process.StandardOutput;
+            StreamReader errorReader = process.StandardError;
+            process.WaitForExit();
+            string result = reader.ReadToEnd();
+            string error = errorReader.ReadToEnd();
+            if(!string.IsNullOrEmpty(error))
+                throw new EvaluateException(error);
+
             return result;
         }
 
@@ -47,18 +50,43 @@ namespace Meerkatalyst.Lonestar.EditorExtension.Execution
             Process process = new Process();
             process.StartInfo = new ProcessStartInfo(command, arguments);
             process.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+            process.StartInfo.CreateNoWindow = true;
             process.StartInfo.RedirectStandardOutput = true;
+            process.StartInfo.RedirectStandardError = true;
             process.StartInfo.UseShellExecute = false;
             return process;
         }
 
+
+        private string GetRubyInterpreter()
+        {
+            return @"C:\Ruby\bin\ruby";
+        }
+
         public string GetArguments()
         {
-            string directory = Directory.GetParent(Assembly.GetExecutingAssembly().Location).FullName;
-            string fullPathToFormatter = Path.Combine(directory, PATH_TO_FORMATTER);
-            string command = "--require \"{0}\" --format {1} \"{2}\"";
+            string command = GetCucumberCommand() + " " + GetFormatter() + " " + GetRequirePathAndFeatureFile();
 
-            return string.Format(command, fullPathToFormatter, FORMATTER_NAME, FeatureFile);
+            return command;
+        }
+
+        private string GetCucumberCommand()
+        {
+            return @"C:\Ruby\bin\cucumber";
+        }
+
+        private string GetFormatter()
+        {
+            string directory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            string fullPathToFormatter = Path.Combine(directory, PATH_TO_FORMATTER);
+
+            return "--require \"" + fullPathToFormatter + "\" --format " + FORMATTER_NAME;
+        }
+
+        private string GetRequirePathAndFeatureFile()
+        {
+            string path = Path.GetDirectoryName(FeatureFile);
+            return string.Format("--require \"{0}\" \"{1}\"", path, FeatureFile);
         }
     }
 }

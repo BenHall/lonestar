@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using Meerkatalyst.Lonestar.EditorExtension.ResultAdapter.ResultModels;
 
 namespace Meerkatalyst.Lonestar.EditorExtension.ResultAdapter
 {
@@ -12,7 +13,6 @@ namespace Meerkatalyst.Lonestar.EditorExtension.ResultAdapter
 
             FeatureResult featureResult = new FeatureResult();
             ScenarioResult scenarioResult = new ScenarioResult();
-            bool currentlyInScenario = false;
 
             for (int index = 0; index < lines.Length; index++)
             {
@@ -45,33 +45,5 @@ namespace Meerkatalyst.Lonestar.EditorExtension.ResultAdapter
 
             return featureResults;
         }
-    }
-
-    public class FeatureResult
-    {
-        public List<ScenarioResult> ScenarioResults { get; set; }
-        public string Name { get; set; }
-
-        public FeatureResult()
-        {
-            ScenarioResults = new List<ScenarioResult>();
-        }
-    }
-
-    public class ScenarioResult
-    {
-        public List<StepResult> StepResults { get; set; }
-        public string Name { get; set; }
-
-        public ScenarioResult()
-        {
-            StepResults = new List<StepResult>();
-        }
-    }
-
-    public class StepResult
-    {
-        public string Name { get; set; }
-        public string Result { get; set; }
     }
 }

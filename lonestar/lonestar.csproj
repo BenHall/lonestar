@@ -10,7 +10,8 @@
     <RootNamespace>Meerkatalyst.Lonestar</RootNamespace>
     <AssemblyName>Lonestar</AssemblyName>
     <SignAssembly>True</SignAssembly>
-    <AssemblyOriginatorKeyFile>Key.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>
+    </AssemblyOriginatorKeyFile>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <ProjectGuid>{B4D2B039-3D83-4153-9FB0-383A0D666B2C}</ProjectGuid>
   </PropertyGroup>
@@ -91,9 +92,6 @@
     <None Include="source.extension.vsixmanifest">
       <SubType>Designer</SubType>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Key.snk" />
   </ItemGroup>
   <ItemGroup>
     <VSCTCompile Include="Lonestar.vsct">

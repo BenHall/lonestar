@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel.Composition;
+﻿using System.ComponentModel.Composition;
 using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.VisualStudio.Utilities;
 
@@ -12,17 +11,12 @@ namespace Meerkatalyst.Lonestar.EditorExtension
     {
         public void TextViewCreated(IWpfTextView textView)
         {
-            TextViewTracker.Views.Add(textView);
+            TextViewTracker.View = textView;
         }
     }
 
     public static class TextViewTracker
     {
-        public static List<IWpfTextView> Views { get; set; }
-
-        static TextViewTracker()
-        {
-            Views = new List<IWpfTextView>();
-        }
+        public static IWpfTextView View { get; set; }
     }
 }

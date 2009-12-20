@@ -1,12 +1,18 @@
-Feature: Search courses
-  In order to ensure better utilization of courses
-  Potential students should be able to search for courses
+Feature: Meerkatalyst.Lonestar Hello World!
+		 Visit http://www.meerkatalyst.com
+		 and http://blog.benhall.me.uk
 
- Scenario: Search by topic
- Given there are 240 courses which do not have the topic "biology"
-   And there are 2 courses A001, B205 that each have "biology" as one of the topics
-   When I search for "biology"
-   Then I should see the following courses:
-      | Course code |
-      | A001        |
-      | B205        |
+ Scenario: Go Green
+   Given a scenario
+   When it passes
+   Then the steps should go green
+   
+ Scenario: Go Yellow
+   Given a scenario
+   When the "then" step is not implemented
+   Then it should go yellow
+   
+ Scenario: Go Red 
+   Given a scenario
+   When "then" fails
+   Then it should go red

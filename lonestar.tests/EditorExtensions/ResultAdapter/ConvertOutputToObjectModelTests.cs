@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Meerkatalyst.Lonestar.EditorExtension.ResultAdapter;
+using Meerkatalyst.Lonestar.EditorExtension.ResultAdapter.ResultModels;
 using Xunit;
 
 namespace lonestar.tests.EditorExtensions.ResultAdapter

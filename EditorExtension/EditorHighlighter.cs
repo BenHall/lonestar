@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Windows.Controls;
 using System.Windows.Media;
 using Meerkatalyst.Lonestar.EditorExtension.LineResultMarkers;
-using Meerkatalyst.Lonestar.EditorExtension.ResultAdapter;
+using Meerkatalyst.Lonestar.EditorExtension.ResultAdapter.ResultModels;
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.VisualStudio.Text.Formatting;
@@ -18,17 +18,6 @@ namespace Meerkatalyst.Lonestar.EditorExtension
         {
             _view = view;
             _layer = view.GetAdornmentLayer("EditorHighlighter");
-
-            //Listen to any event that changes the layout (text changes, scrolling, etc)
-            //_view.LayoutChanged += OnLayoutChanged;
-        }
-
-        private void OnLayoutChanged(object sender, TextViewLayoutChangedEventArgs e)
-        {
-            foreach (ITextViewLine line in e.NewOrReformattedLines)
-            {
-                CreateVisuals(line, new Fail());
-            }
         }
 
         private void CreateVisuals(ITextViewLine line, LineResultMarker resultMarker)
@@ -55,7 +44,6 @@ namespace Meerkatalyst.Lonestar.EditorExtension
                 Image image = new Image();
                 image.Source = drawingImage;
 
-                //Align the image with the top of the bounds of the text geometry
                 Canvas.SetLeft(image, g.Bounds.Left);
                 Canvas.SetTop(image, g.Bounds.Top);
 
@@ -63,16 +51,9 @@ namespace Meerkatalyst.Lonestar.EditorExtension
             }
         }
 
-        public static EditorHighlighter Instance { get; set; }
-        //TODO: Use MEF!
-        public static void Create(IWpfTextView textView)
-        {
-            if (Instance == null)
-                Instance = new EditorHighlighter(textView);
-        }
-
         public void UpdateUI(List<FeatureResult> featureResults)
         {
+            _layer.RemoveAllAdornments();
             foreach (FeatureResult featureResult in featureResults)
             {
                 foreach (ScenarioResult scenarioResult in featureResult.ScenarioResults)
@@ -89,7 +70,7 @@ namespace Meerkatalyst.Lonestar.EditorExtension
             {
                 foreach (ITextViewLine line in _view.TextViewLines)
                 {
-                    if(line.Snapshot.GetText().Equals(stepResult.Name))
+                    if (line.SnapshotLine.GetText().EndsWith(stepResult.Name))
                     {
                         LineResultMarker resultMarker = GetResultMarker(stepResult.Result);
                         CreateVisuals(line, resultMarker);
@@ -106,9 +87,11 @@ namespace Meerkatalyst.Lonestar.EditorExtension
                     return new Pass();
                 case "failed":
                     return new Fail();
+                case "undefined":
+                    return new Pending();
             }
 
-            return new Pending();
+            return new Fail();
         }
     }
 }

@@ -15,9 +15,9 @@ module Meerkatalyst
       end
 
       def after_step_result(keyword, step_match, multiline_arg, status, exception, source_indent, background)
-        puts "after_step_result"
-        puts step_match.instance_variable_get("@name")
-		puts status.to_s
+		puts "after_step_result"
+    	puts step_match.format_args(lambda{|param| "#{param}"})
+		puts status
       end
 
 	  def after_feature(feature)
