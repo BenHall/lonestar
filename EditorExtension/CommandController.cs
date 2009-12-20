@@ -2,22 +2,30 @@
 using Meerkatalyst.Lonestar.EditorExtension.Execution;
 using Meerkatalyst.Lonestar.EditorExtension.ResultAdapter;
 using Meerkatalyst.Lonestar.EditorExtension.ResultAdapter.ResultModels;
+using Microsoft.VisualStudio.Text.Editor;
 
 namespace Meerkatalyst.Lonestar.EditorExtension
 {
     public class CommandController
     {
-        public void UpdateActiveCucumberFile(string activeFilePath)
+        public void RunCucumberTestsAndUpdateUI(string activeFilePath, IWpfTextView activeView)
         {
-            TextViewTracker.Frozen = true;
-            EditorHighlighter editorHighlighter = new EditorHighlighter(TextViewTracker.View);
+            List<FeatureResult> featureResults = ExecuteCucumber(activeFilePath);
+            UpdateUI(activeView, featureResults);
+        }
 
+        public List<FeatureResult> ExecuteCucumber(string activeFilePath)
+        {
             Cucumber cucumber = new Cucumber(activeFilePath);
             string result = cucumber.Execute();
             
             ConvertOutputToObjectModel converter = new ConvertOutputToObjectModel();
-            List<FeatureResult> featureResults = converter.Convert(result);
+            return converter.Convert(result);
+        }
 
+        public void UpdateUI(IWpfTextView wpfTextView, List<FeatureResult> featureResults)
+        {
+            EditorHighlighter editorHighlighter = new EditorHighlighter(wpfTextView);
             editorHighlighter.UpdateUI(featureResults);
         }
     }

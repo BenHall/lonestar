@@ -94,7 +94,7 @@ namespace Meerkatalyst.Lonestar.EditorExtension
                     return new Pending();
             }
 
-            return new Fail();
+            return new Pending();
         }
     }
 }
