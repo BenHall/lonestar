@@ -12,7 +12,7 @@ Feature: Meerkatalyst.Lonestar Hello World!
    When the "then" step is not implemented
    Then it should go yellow
    
- Scenario: Go Red 
+ Scenario: Go Red
    Given a scenario
    When "then" fails
    Then it should go red

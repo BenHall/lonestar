@@ -9,6 +9,7 @@ namespace Meerkatalyst.Lonestar.EditorExtension
     {
         public void UpdateActiveCucumberFile(string activeFilePath)
         {
+            TextViewTracker.Frozen = true;
             EditorHighlighter editorHighlighter = new EditorHighlighter(TextViewTracker.View);
 
             Cucumber cucumber = new Cucumber(activeFilePath);

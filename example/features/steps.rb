@@ -19,7 +19,7 @@ Then /^it should go yellow$/ do
 end
 
 When /^"([^\"]*)" fails$/ do |arg1|
-  raise "Error"
+ raise "Error"
 end
 
 Then /^it should go red$/ do

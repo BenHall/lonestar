@@ -11,9 +11,10 @@ namespace Meerkatalyst.Lonestar.EditorExtension
 {
     public class EditorHighlighter
     {
+        private const string resultmarker = "ResultMarker";
         IAdornmentLayer _layer;
         IWpfTextView _view;
-        
+
         public EditorHighlighter(IWpfTextView view)
         {
             _view = view;
@@ -47,13 +48,14 @@ namespace Meerkatalyst.Lonestar.EditorExtension
                 Canvas.SetLeft(image, g.Bounds.Left);
                 Canvas.SetTop(image, g.Bounds.Top);
 
-                _layer.AddAdornment(AdornmentPositioningBehavior.TextRelative, span, null, image, null);
+                _layer.AddAdornment(AdornmentPositioningBehavior.TextRelative, span, resultmarker, image, null);
             }
         }
 
         public void UpdateUI(List<FeatureResult> featureResults)
         {
             _layer.RemoveAllAdornments();
+            _layer.RemoveAdornmentsByTag(resultmarker);
             foreach (FeatureResult featureResult in featureResults)
             {
                 foreach (ScenarioResult scenarioResult in featureResult.ScenarioResults)
@@ -61,7 +63,6 @@ namespace Meerkatalyst.Lonestar.EditorExtension
                     HighlightStepsWithResults(scenarioResult);
                 }
             }
-
         }
 
         private void HighlightStepsWithResults(ScenarioResult scenarioResult)
@@ -87,7 +88,9 @@ namespace Meerkatalyst.Lonestar.EditorExtension
                     return new Pass();
                 case "failed":
                     return new Fail();
-                case "undefined":
+                case "skipped":
+                    return new Skipped();
+                case "pending":
                     return new Pending();
             }
 
