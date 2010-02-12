@@ -71,7 +71,7 @@ namespace Meerkatalyst.Lonestar.EditorExtension
             {
                 foreach (ITextViewLine line in _view.TextViewLines)
                 {
-                    if (line.SnapshotLine.GetText().EndsWith(stepResult.Name))
+                    if (line.Snapshot.GetText().EndsWith(stepResult.Name))
                     {
                         LineResultMarker resultMarker = GetResultMarker(stepResult.Result);
                         CreateVisuals(line, resultMarker);

@@ -53,7 +53,7 @@ namespace Meerkatalyst.Lonestar
                 return this.control;
             }
 
-            protected set
+            set
             {
                 base.Content = value;
             }
