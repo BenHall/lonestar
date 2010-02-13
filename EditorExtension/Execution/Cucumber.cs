@@ -8,6 +8,7 @@ namespace Meerkatalyst.Lonestar.EditorExtension.Execution
     public class Cucumber
     {
         private const string FORMATTER_FILE_NAME = "basic_info.rb";
+        private const string FORMATTERS_DIRECTORY = "Formatters";
         private const string FORMATTER_CLASS_NAME = "Meerkatalyst::Lonestar::BasicInfo";
         public string FeatureFile { get; set; }
 
@@ -76,8 +77,8 @@ namespace Meerkatalyst.Lonestar.EditorExtension.Execution
 
         private string GetFormatter()
         {
-            string directory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-            string fullPathToFormatter = Path.Combine(directory, FORMATTER_FILE_NAME);
+            string directory = Path.GetDirectoryName(Assembly.GetAssembly(typeof(Cucumber)).Location);
+            string fullPathToFormatter = Path.Combine(directory, Path.Combine(FORMATTERS_DIRECTORY, FORMATTER_FILE_NAME));
 
             return string.Format("--require \"{0}\" --format {1}", fullPathToFormatter, FORMATTER_CLASS_NAME);
         }

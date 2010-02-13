@@ -54,7 +54,7 @@ namespace Meerkatalyst.Lonestar.EditorExtension
             return stepResults.FirstOrDefault(stepResult => line.GetText().EndsWith(stepResult.Name));
         }
 
-        private void HighlightLine(SnapshotSpan line, LineResultMarker marker)
+        public void HighlightLine(SnapshotSpan line, LineResultMarker marker)
         {
             IWpfTextViewLineCollection textViewLines = _view.TextViewLines;
             Geometry geometry = textViewLines.GetMarkerGeometry(line);

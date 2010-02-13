@@ -34,15 +34,14 @@
         </Strings>
       </Button>
 
-      <Button guid="guidLonestarCmdSet" id="resultsWindow" priority="0x0100" type="Button">
+      <!--<Button guid="guidLonestarCmdSet" id="resultsWindow" priority="0x0100" type="Button">
         <Parent guid="guidLonestarCmdSet" id="MyMenuGroup" />
         <Icon guid="guidImages" id="bmpPic2" />
         <Strings>
           <CommandName>resultsWindow</CommandName>
           <ButtonText>Lonestar Results Window</ButtonText>
         </Strings>
-      </Button>
-
+      </Button>-->
 
     </Buttons>
    
