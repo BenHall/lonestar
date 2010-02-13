@@ -9,7 +9,7 @@ namespace Meerkatalyst.Lonestar.EditorExtension.LineResultMarkers
 
         protected void SetupColours(Color baseColour)
         {
-            Fill = new SolidColorBrush(Color.FromScRgb(35, baseColour.ScR, baseColour.ScG, baseColour.ScB));
+            Fill = new SolidColorBrush(Color.FromScRgb(100, baseColour.ScR, baseColour.ScG, baseColour.ScB));
             Fill.Freeze();
             Outline = new Pen(new SolidColorBrush(baseColour), 0.5);
             Outline.Freeze();
