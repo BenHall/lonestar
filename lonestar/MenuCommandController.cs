@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using Meerkatalyst.Lonestar.EditorExtension;
+using Meerkatalyst.Lonestar.EditorExtension.ResultAdapter.ResultModels;
 using Microsoft.VisualStudio.Shell;
 
 namespace Meerkatalyst.Lonestar
@@ -13,16 +15,12 @@ namespace Meerkatalyst.Lonestar
             Package = package;
         }
 
-        public void MenuItemCallback(object sender, EventArgs e)
-        {
-            IssueCommand();
-        }
-
-        private void IssueCommand()
+        public void RunLonestarOnActiveView(object sender, EventArgs e)
         {
             CommandController controller = new CommandController(); 
             ActiveWindowManager activeWindowManager = new ActiveWindowManager(Package);
-            controller.RunCucumberTestsAndUpdateUI(activeWindowManager.GetPathToActiveDocument(), activeWindowManager.GetActiveView()); 
+            List<FeatureResult> featureResults = controller.ExecuteCucumber(activeWindowManager.GetPathToActiveDocument());
+            controller.UpdateUI(activeWindowManager.GetActiveView(), featureResults);
         }
     }
 }

@@ -8,42 +8,50 @@ namespace Meerkatalyst.Lonestar.EditorExtension.ResultAdapter
     {
         public List<FeatureResult> Convert(string result)
         {
-            string[] lines = Regex.Split(result, "\n");
+            string[] lines = GetLinesFromResult(result);
+            
             List<FeatureResult> featureResults = new List<FeatureResult>();
-
             FeatureResult featureResult = new FeatureResult();
             ScenarioResult scenarioResult = new ScenarioResult();
 
             for (int index = 0; index < lines.Length; index++)
             {
                 var resultLine = lines[index].Trim();
-                if (resultLine.Equals("feature_name"))
+                switch(resultLine)
                 {
-                    featureResult.Name = lines[++index];
-                }
-                else if (resultLine.Equals("feature_done"))
-                {
-                    featureResults.Add(featureResult);
-                }
-                else if (resultLine.Equals("scenario_name"))
-                {
-                    scenarioResult = new ScenarioResult();
-                    scenarioResult.Name = lines[++index];
-                }
-                else if (resultLine.Equals("after_step_result"))
-                {
-                    StepResult stepResult = new StepResult();
-                    stepResult.Name = lines[++index];
-                    stepResult.Result = lines[++index];
-                    scenarioResult.StepResults.Add(stepResult);
-                }
-                else if (resultLine.Equals("steps_done"))
-                {
-                    featureResult.ScenarioResults.Add(scenarioResult);
+                    case("feature_name"):
+                        featureResult.Name = lines[++index];
+                        break;
+                    case("feature_done"):
+                       featureResults.Add(featureResult);
+                        break;
+                    case ("scenario_name"):
+                        scenarioResult = new ScenarioResult {Name = lines[++index]};
+                        break;
+                    case("after_step_result"):
+                        var stepResult = CreateStepResult(index, lines);
+                        scenarioResult.StepResults.Add(stepResult);
+                        break;
+                    case("steps_done"):
+                        featureResult.ScenarioResults.Add(scenarioResult);
+                        break;
                 }
             }
 
             return featureResults;
+        }
+
+        private string[] GetLinesFromResult(string result)
+        {
+            return Regex.Split(result, "\n");
+        }
+
+        private StepResult CreateStepResult(int index, string[] lines)
+        {
+            StepResult stepResult = new StepResult();
+            stepResult.Name = lines[++index].Trim();
+            stepResult.Result = lines[++index].Trim();
+            return stepResult;
         }
     }
 }

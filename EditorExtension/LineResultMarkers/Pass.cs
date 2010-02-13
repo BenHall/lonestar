@@ -4,11 +4,8 @@ namespace Meerkatalyst.Lonestar.EditorExtension.LineResultMarkers
 {
     class Pass : LineResultMarker
     {
-        public override Brush Fill { get; set; }
-        public override Pen Outline { get; set; }
-        public Pass()
+        public Pass() : base(Colors.LightGreen)
         {
-            SetupColours(Colors.LightGreen);
         }
     }
 }

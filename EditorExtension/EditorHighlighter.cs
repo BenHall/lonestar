@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Controls;
 using System.Windows.Media;
 using Meerkatalyst.Lonestar.EditorExtension.LineResultMarkers;
@@ -11,7 +12,7 @@ namespace Meerkatalyst.Lonestar.EditorExtension
 {
     public class EditorHighlighter
     {
-        private const string resultmarker = "ResultMarker";
+        private const string RESULT_MARKER = "ResultMarker";
         IAdornmentLayer _layer;
         IWpfTextView _view;
 
@@ -21,63 +22,72 @@ namespace Meerkatalyst.Lonestar.EditorExtension
             _layer = view.GetAdornmentLayer("EditorHighlighter");
         }
 
-        private void CreateVisuals(ITextViewLine line, LineResultMarker resultMarker)
-        {
-            int start = line.Start;
-            int end = line.End;
-
-            SnapshotSpan span = new SnapshotSpan(_view.TextSnapshot, Span.FromBounds(start, end));
-            HighlightLine(span, resultMarker);
-        }
-
-        private void HighlightLine(SnapshotSpan span, LineResultMarker marker)
-        {
-            IWpfTextViewLineCollection textViewLines = _view.TextViewLines;
-            Geometry g = textViewLines.GetMarkerGeometry(span);
-            if (g != null)
-            {
-                GeometryDrawing drawing = new GeometryDrawing(marker.Fill, marker.Outline, g);
-                drawing.Freeze();
-
-                DrawingImage drawingImage = new DrawingImage(drawing);
-                drawingImage.Freeze();
-
-                Image image = new Image();
-                image.Source = drawingImage;
-
-                Canvas.SetLeft(image, g.Bounds.Left);
-                Canvas.SetTop(image, g.Bounds.Top);
-
-                _layer.AddAdornment(AdornmentPositioningBehavior.TextRelative, span, resultmarker, image, null);
-            }
-        }
-
-        public void UpdateUI(List<FeatureResult> featureResults)
+        public void HighlightFeatureFileWithResults(IEnumerable<FeatureResult> featureResults)
         {
             _layer.RemoveAllAdornments();
-            _layer.RemoveAdornmentsByTag(resultmarker);
+            _layer.RemoveAdornmentsByTag(RESULT_MARKER);
             foreach (FeatureResult featureResult in featureResults)
             {
                 foreach (ScenarioResult scenarioResult in featureResult.ScenarioResults)
                 {
-                    HighlightStepsWithResults(scenarioResult);
+                    HighlightScenarioStepsWithResults(scenarioResult);
                 }
             }
         }
 
-        private void HighlightStepsWithResults(ScenarioResult scenarioResult)
+        private void HighlightScenarioStepsWithResults(ScenarioResult scenarioResult)
         {
-            foreach (StepResult stepResult in scenarioResult.StepResults)
+            foreach (IWpfTextViewLine line in _view.TextViewLines.WpfTextViewLines)
             {
-                foreach (IWpfTextViewLine line in _view.TextViewLines.WpfTextViewLines)
+                var lineSpan = CreateSpan(line);
+                StepResult stepResult = GetResultForLine(lineSpan, scenarioResult.StepResults);
+                if (stepResult != null)
                 {
-                    if (line.Snapshot.GetText(line.Start, line.Length).EndsWith(stepResult.Name))
-                    {
-                        LineResultMarker resultMarker = GetResultMarker(stepResult.Result);
-                        CreateVisuals(line, resultMarker);
-                    }
+                    LineResultMarker resultMarker = GetResultMarker(stepResult.Result);
+                    HighlightLine(lineSpan, resultMarker);
                 }
             }
+        }
+
+        private StepResult GetResultForLine(SnapshotSpan line, IEnumerable<StepResult> stepResults)
+        {
+            return stepResults.FirstOrDefault(stepResult => line.GetText().EndsWith(stepResult.Name));
+        }
+
+        private void HighlightLine(SnapshotSpan line, LineResultMarker marker)
+        {
+            IWpfTextViewLineCollection textViewLines = _view.TextViewLines;
+            Geometry geometry = textViewLines.GetMarkerGeometry(line);
+            if (geometry != null)
+            {
+                Image highlight = CreateImageToHighlightLine(geometry, marker);
+
+                Canvas.SetLeft(highlight, geometry.Bounds.Left);
+                Canvas.SetTop(highlight, geometry.Bounds.Top);
+
+                _layer.AddAdornment(AdornmentPositioningBehavior.TextRelative, line, RESULT_MARKER, highlight, null);
+            }
+        }
+
+        private Image CreateImageToHighlightLine(Geometry geometry, LineResultMarker marker)
+        {
+            GeometryDrawing drawing = new GeometryDrawing(marker.Fill, marker.Outline, geometry);
+            drawing.Freeze();
+
+            DrawingImage drawingImage = new DrawingImage(drawing);
+            drawingImage.Freeze();
+
+            Image image = new Image();
+            image.Source = drawingImage;
+            return image;
+        }
+
+        private SnapshotSpan CreateSpan(ITextViewLine line)
+        {
+            int start = line.Start;
+            int end = line.End;
+
+            return new SnapshotSpan(_view.TextSnapshot, Span.FromBounds(start, end));
         }
 
         private LineResultMarker GetResultMarker(string result)

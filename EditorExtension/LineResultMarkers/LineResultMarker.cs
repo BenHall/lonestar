@@ -2,12 +2,12 @@
 
 namespace Meerkatalyst.Lonestar.EditorExtension.LineResultMarkers
 {
-    internal abstract class LineResultMarker
+    public abstract class LineResultMarker
     {
-        public abstract Brush Fill { get; set; }
-        public abstract Pen Outline { get; set; }
+        public Brush Fill { get; set; }
+        public Pen Outline { get; set; }
 
-        protected void SetupColours(Color baseColour)
+        public LineResultMarker(Color baseColour)
         {
             Fill = new SolidColorBrush(Color.FromScRgb(100, baseColour.ScR, baseColour.ScG, baseColour.ScB));
             Fill.Freeze();

@@ -31,6 +31,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="PresentationCore" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -38,12 +39,15 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
     <Reference Include="xunit">
       <HintPath>..\libs\xunit\xunit.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EditorExtensions\EditorHighlighterTests.cs" />
     <Compile Include="EditorExtensions\Execution\CucumberTests.cs" />
+    <Compile Include="EditorExtensions\LineResultMarkers\LineResultMarkerTests.cs" />
     <Compile Include="EditorExtensions\ResultAdapter\ConvertOutputToObjectModelTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

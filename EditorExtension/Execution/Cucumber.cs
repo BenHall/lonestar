@@ -7,8 +7,8 @@ namespace Meerkatalyst.Lonestar.EditorExtension.Execution
 {
     public class Cucumber
     {
-        private const string PATH_TO_FORMATTER = "basic_info.rb";
-        private const string FORMATTER_NAME = "Meerkatalyst::Lonestar::BasicInfo";
+        private const string FORMATTER_FILE_NAME = "basic_info.rb";
+        private const string FORMATTER_CLASS_NAME = "Meerkatalyst::Lonestar::BasicInfo";
         public string FeatureFile { get; set; }
 
         public Cucumber(string featureFile)
@@ -36,7 +36,9 @@ namespace Meerkatalyst.Lonestar.EditorExtension.Execution
         {
             StreamReader reader = process.StandardOutput;
             StreamReader errorReader = process.StandardError;
+
             process.WaitForExit();
+
             string result = reader.ReadToEnd();
             string error = errorReader.ReadToEnd();
             if(!string.IsNullOrEmpty(error))
@@ -57,7 +59,6 @@ namespace Meerkatalyst.Lonestar.EditorExtension.Execution
             return process;
         }
 
-
         private string GetRubyInterpreter()
         {
             return @"C:\Ruby\bin\ruby";
@@ -65,9 +66,7 @@ namespace Meerkatalyst.Lonestar.EditorExtension.Execution
 
         public string GetArguments()
         {
-            string command = GetCucumberCommand() + " " + GetFormatter() + " " + GetRequirePathAndFeatureFile();
-
-            return command;
+            return string.Format("{0} {1} {2}", GetCucumberCommand(), GetFormatter(), GetRequirePathAndFeatureFile());
         }
 
         private string GetCucumberCommand()
@@ -78,15 +77,15 @@ namespace Meerkatalyst.Lonestar.EditorExtension.Execution
         private string GetFormatter()
         {
             string directory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-            string fullPathToFormatter = Path.Combine(directory, PATH_TO_FORMATTER);
+            string fullPathToFormatter = Path.Combine(directory, FORMATTER_FILE_NAME);
 
-            return "--require \"" + fullPathToFormatter + "\" --format " + FORMATTER_NAME;
+            return string.Format("--require \"{0}\" --format {1}", fullPathToFormatter, FORMATTER_CLASS_NAME);
         }
 
         private string GetRequirePathAndFeatureFile()
         {
-            string path = Path.GetDirectoryName(FeatureFile);
-            return string.Format("--require \"{0}\" \"{1}\"", path, FeatureFile);
+            string directoryName = Path.GetDirectoryName(FeatureFile);
+            return string.Format("--require \"{0}\" \"{1}\"", directoryName, FeatureFile);
         }
     }
 }

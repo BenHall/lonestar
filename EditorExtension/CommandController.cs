@@ -8,12 +8,6 @@ namespace Meerkatalyst.Lonestar.EditorExtension
 {
     public class CommandController
     {
-        public void RunCucumberTestsAndUpdateUI(string activeFilePath, IWpfTextView activeView)
-        {
-            List<FeatureResult> featureResults = ExecuteCucumber(activeFilePath);
-            UpdateUI(activeView, featureResults);
-        }
-
         public List<FeatureResult> ExecuteCucumber(string activeFilePath)
         {
             Cucumber cucumber = new Cucumber(activeFilePath);
@@ -26,7 +20,7 @@ namespace Meerkatalyst.Lonestar.EditorExtension
         public void UpdateUI(IWpfTextView wpfTextView, List<FeatureResult> featureResults)
         {
             EditorHighlighter editorHighlighter = new EditorHighlighter(wpfTextView);
-            editorHighlighter.UpdateUI(featureResults);
+            editorHighlighter.HighlightFeatureFileWithResults(featureResults);
         }
     }
 }

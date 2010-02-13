@@ -4,11 +4,9 @@ namespace Meerkatalyst.Lonestar.EditorExtension.LineResultMarkers
 {
     class Skipped : LineResultMarker
     {
-        public override Brush Fill { get; set; }
-        public override Pen Outline { get; set; }
         public Skipped()
+            : base(Colors.SkyBlue)
         {
-            SetupColours(Colors.SkyBlue);
         }
     }
 }

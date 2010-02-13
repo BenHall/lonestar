@@ -4,11 +4,9 @@ namespace Meerkatalyst.Lonestar.EditorExtension.LineResultMarkers
 {
     class Pending : LineResultMarker
     {
-        public override Brush Fill { get; set; }
-        public override Pen Outline { get; set; }
         public Pending()
+            : base(Colors.Yellow)
         {
-            SetupColours(Colors.Yellow);
         }
     }
 }
