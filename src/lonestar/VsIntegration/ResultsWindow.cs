@@ -2,7 +2,7 @@
 using System.Runtime.InteropServices;
 using Microsoft.VisualStudio.Shell;
 
-namespace Meerkatalyst.Lonestar
+namespace Meerkatalyst.Lonestar.VsIntegration
 {
     /// <summary>
     /// This class implements the tool window exposed by this package and hosts a user control.
@@ -14,7 +14,7 @@ namespace Meerkatalyst.Lonestar
     /// implementation of the IVsUIElementPane interface.
     /// </summary>
     [Guid("ec204ef7-1bf9-4239-a253-9dd8490259d4")]
-    public class MyToolWindow : ToolWindowPane
+    public class ResultsWindow : ToolWindowPane
     {
         // This is the user control hosted by the tool window; it is exposed to the base class 
         // using the Content property. Note that, even if this class implements IDispose, we are
@@ -25,7 +25,7 @@ namespace Meerkatalyst.Lonestar
         /// <summary>
         /// Standard constructor for the tool window.
         /// </summary>
-        public MyToolWindow() :
+        public ResultsWindow() :
             base(null)
         {
             // Set the window title reading it from the resources.

@@ -2,6 +2,8 @@
 using System.Globalization;
 using System.Runtime.InteropServices;
 using System.ComponentModel.Design;
+using Meerkatalyst.Lonestar.Properties;
+using Meerkatalyst.Lonestar.VsIntegration;
 using Microsoft.VisualStudio.Shell;
 
 namespace Meerkatalyst.Lonestar
@@ -9,7 +11,7 @@ namespace Meerkatalyst.Lonestar
     [PackageRegistration(UseManagedResourcesOnly = true)]
     [InstalledProductRegistration("#110", "#112", "1.0", IconResourceID = 400)]
     [ProvideMenuResource("Menus.ctmenu", 1)]
-    [ProvideToolWindow(typeof(MyToolWindow))]
+    [ProvideToolWindow(typeof(VsIntegration.ResultsWindow))]
     [Guid(GuidList.guidLonestarPkgString)]
     public sealed class LonestarPackage : Package
     {

@@ -2,7 +2,7 @@
 // MUST match guids.h
 using System;
 
-namespace Meerkatalyst.Lonestar
+namespace Meerkatalyst.Lonestar.Properties
 {
     static class GuidList
     {

@@ -4,7 +4,7 @@
     <Name>Meerkatalyst.Lonestar</Name>
     <Author>Meerkatalyst</Author>
     <Version>0.2</Version>
-    <Description xml:space="preserve">Lonestar is part of Meerkatalyst.com. Lonestar is a Visual Studio 2010 extension, allowing you to execute RSpec, Cucumber and Cuke4Nuke tests and see the results within the IDE. </Description>
+    <Description xml:space="preserve">Lonestar is part of Meerkatalyst.com. Lonestar is a Visual Studio 2010 extension, allowing you to execute Cucumber, Cuke4Nuke and RSpec tests and see the results within the IDE. </Description>
     <Locale>1033</Locale>
     <MoreInfoUrl>http://www.meerkatalyst.com/lonestar</MoreInfoUrl>
     <PreviewImage>preview.bmp</PreviewImage>

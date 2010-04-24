@@ -4,7 +4,7 @@ using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.VisualStudio.TextManager.Interop;
 
-namespace Meerkatalyst.Lonestar
+namespace Meerkatalyst.Lonestar.VsIntegration
 {
     public class ActiveWindowManager
     {

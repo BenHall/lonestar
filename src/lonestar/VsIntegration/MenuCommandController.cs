@@ -4,7 +4,7 @@ using Meerkatalyst.Lonestar.EditorExtension;
 using Meerkatalyst.Lonestar.EditorExtension.ResultAdapter.ResultModels;
 using Microsoft.VisualStudio.Shell;
 
-namespace Meerkatalyst.Lonestar
+namespace Meerkatalyst.Lonestar.VsIntegration
 {
     public class MenuCommandController
     {
