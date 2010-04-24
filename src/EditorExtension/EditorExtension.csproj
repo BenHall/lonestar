@@ -71,7 +71,7 @@
     <Reference Include="System.Xaml" />
     <Reference Include="WindowsBase" />
   </ItemGroup>
-    <ItemGroup>
+  <ItemGroup>
     <COMReference Include="EnvDTE">
       <Guid>{80CC9F66-E7D8-4DDD-85B6-D9E6CD0E93E2}</Guid>
       <VersionMajor>8</VersionMajor>
@@ -128,7 +128,7 @@
     </COMReference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CommandController.cs" />
+    <Compile Include="Interaction\CommandController.cs" />
     <Compile Include="Execution\Cucumber.cs" />
     <Compile Include="LineResultMarkers\Skipped.cs" />
     <Compile Include="LineResultMarkers\Fail.cs" />
@@ -140,8 +140,8 @@
     <Compile Include="ResultAdapter\ResultModels\FeatureResult.cs" />
     <Compile Include="ResultAdapter\ResultModels\ScenarioResult.cs" />
     <Compile Include="ResultAdapter\ResultModels\StepResult.cs" />
-    <Compile Include="TextChangedListener.cs" />
-    <Compile Include="EditorHighlighter.cs" />
+    <Compile Include="Interaction\TextChangedListener.cs" />
+    <Compile Include="Interaction\EditorHighlighter.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Formatters\basic_info.rb">

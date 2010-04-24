@@ -4,7 +4,7 @@ using Meerkatalyst.Lonestar.EditorExtension.ResultAdapter;
 using Meerkatalyst.Lonestar.EditorExtension.ResultAdapter.ResultModels;
 using Microsoft.VisualStudio.Text.Editor;
 
-namespace Meerkatalyst.Lonestar.EditorExtension
+namespace Meerkatalyst.Lonestar.EditorExtension.Interaction
 {
     public class CommandController
     {

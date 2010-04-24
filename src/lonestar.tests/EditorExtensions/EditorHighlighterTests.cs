@@ -1,18 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Drawing;
-using System.Windows;
-using System.Windows.Media.TextFormatting;
-using Meerkatalyst.Lonestar.EditorExtension;
+﻿using System.Collections.Generic;
+using Meerkatalyst.Lonestar.EditorExtension.Interaction;
 using Meerkatalyst.Lonestar.EditorExtension.ResultAdapter.ResultModels;
-using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Editor;
-using Microsoft.VisualStudio.Text.Formatting;
 using Rhino.Mocks;
 using Xunit;
-using Rhino.Mocks.Constraints;
-using TextBounds = Microsoft.VisualStudio.Text.Formatting.TextBounds;
 
 namespace lonestar.tests.EditorExtensions
 {
