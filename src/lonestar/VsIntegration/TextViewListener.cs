@@ -1,8 +1,9 @@
 using System.ComponentModel.Composition;
+using Meerkatalyst.Lonestar.EditorExtension.Interaction;
 using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.VisualStudio.Utilities;
 
-namespace Meerkatalyst.Lonestar.EditorExtension.Interaction
+namespace Meerkatalyst.Lonestar.VsIntegration
 {
     [Export(typeof(IWpfTextViewCreationListener))]
     [ContentType("text")]

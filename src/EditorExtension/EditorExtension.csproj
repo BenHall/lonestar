@@ -141,7 +141,6 @@
     <Compile Include="ResultAdapter\ResultModels\FeatureResult.cs" />
     <Compile Include="ResultAdapter\ResultModels\ScenarioResult.cs" />
     <Compile Include="ResultAdapter\ResultModels\StepResult.cs" />
-    <Compile Include="Interaction\TextChangedListener.cs" />
     <Compile Include="Interaction\EditorHighlighter.cs" />
   </ItemGroup>
   <ItemGroup>
