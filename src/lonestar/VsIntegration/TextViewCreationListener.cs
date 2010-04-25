@@ -9,7 +9,7 @@ namespace Meerkatalyst.Lonestar.VsIntegration
     [ContentType("text")]
     [FileExtension(".feature")]
     [TextViewRole(PredefinedTextViewRoles.Document)]
-    internal sealed class TextChangedListener : IWpfTextViewCreationListener
+    internal sealed class TextViewCreationListener : IWpfTextViewCreationListener
     {
         [Export(typeof(AdornmentLayerDefinition))]
         [Name("EditorHighlighter")]
