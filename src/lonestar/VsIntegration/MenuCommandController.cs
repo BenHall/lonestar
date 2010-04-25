@@ -7,6 +7,7 @@ using Meerkatalyst.Lonestar.EditorExtension.ResultAdapter.ResultModels;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
+using System.Windows.Forms;
 
 namespace Meerkatalyst.Lonestar.VsIntegration
 {
@@ -27,24 +28,39 @@ namespace Meerkatalyst.Lonestar.VsIntegration
 
         public void RunLonestarOnActiveView(object sender, EventArgs e)
         {
-            ActiveWindowManager activeWindowManager = new ActiveWindowManager(_package);
+            try
+            {
+                ActiveWindowManager activeWindowManager = new ActiveWindowManager(_package);
 
-            BackgroundWorker worker = new BackgroundWorker();
-            worker.DoWork += ExecuteOnThread;
-            worker.RunWorkerCompleted += (o, args) => UpdateUI(args.Result as List<FeatureResult>, activeWindowManager);
+                BackgroundWorker worker = new BackgroundWorker();
+                worker.DoWork += ExecuteOnThread;
+                worker.RunWorkerCompleted += (o, args) => UpdateUI(args.Result as List<FeatureResult>, activeWindowManager);
 
-            worker.RunWorkerAsync(activeWindowManager.GetPathToActiveDocument());
+                worker.RunWorkerAsync(activeWindowManager.GetPathToActiveDocument());
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error");
+            }
         }
 
         public void RunLonestarOnSolution(object sender, EventArgs e)
         {
-            ActiveWindowManager activeWindowManager = new ActiveWindowManager(_package);
+            try
+            {
+                ActiveWindowManager activeWindowManager = new ActiveWindowManager(_package);
 
-            BackgroundWorker worker = new BackgroundWorker();
-            worker.DoWork += ExecuteOnThread;
-            worker.RunWorkerCompleted += (o, args) => UpdateUI(args.Result as List<FeatureResult>, activeWindowManager);
+                BackgroundWorker worker = new BackgroundWorker();
+                worker.DoWork += ExecuteOnThread;
+                worker.RunWorkerCompleted +=
+                    (o, args) => UpdateUI(args.Result as List<FeatureResult>, activeWindowManager);
 
-            worker.RunWorkerAsync(Path.Combine(activeWindowManager.GetPathToSolution(), "features"));
+                worker.RunWorkerAsync(Path.Combine(activeWindowManager.GetPathToSolution(), "features"));
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error");
+            }
         }
 
         private void UpdateUI(List<FeatureResult> featureResults, ActiveWindowManager activeWindowManager)
