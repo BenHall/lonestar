@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using EnvDTE;
 using Meerkatalyst.Lonestar.EditorExtension.ResultAdapter.ResultModels;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
@@ -12,8 +13,10 @@ namespace Meerkatalyst.Lonestar.VsIntegration
         public LonestarPackage ServiceProvider { get; set; }
         public IVsStatusbar StatusBar { get; set; }
         public IVsOutputWindowPane OutputWindow { get; set; }
+        public IVsTaskList TaskList { get; set; }
 
         //TODO: Get rid of this approach... hacky
+
         public static StatusController Instance
         {
             get
@@ -65,30 +68,30 @@ namespace Meerkatalyst.Lonestar.VsIntegration
                     foreach (StepResult stepResult in scenario.StepResults)
                     {
                         if (stepResult.Result == "failed")
-                            AddStepToErrorList(stepResult);
+                            AddStepToErrorList(featureResult, scenario, stepResult);
                         else if (stepResult.Result == "pending")
-                            AddStepToTaskList(stepResult);
+                            AddStepToTaskList(featureResult, scenario, stepResult);
                     }
                 }
             }
         }
 
-        private void AddStepToErrorList(StepResult stepResult)
+        private void AddStepToErrorList(FeatureResult featureResult, ScenarioResult scenarioResult, StepResult stepResult)
         {
             ErrorListProvider errorProvider = new ErrorListProvider(ServiceProvider);
-            ErrorTask newError = new ErrorTask();
-            newError.Category = TaskCategory.Misc;
-            newError.Text = "Some Error Text";
-            errorProvider.Tasks.Add(newError);
+            ErrorTask error = new ErrorTask();
+            error.Category = TaskCategory.BuildCompile;
+            error.Text = string.Format("The step \"{0}\" failed in scenario \"{1}\" for the feature \"{2}\"", stepResult.Name, scenarioResult.Name, featureResult.Name);
+            errorProvider.Tasks.Add(error);
         }
 
-        private void AddStepToTaskList(StepResult stepResult)
+        private void AddStepToTaskList(FeatureResult featureResult, ScenarioResult scenarioResult, StepResult stepResult)
         {
-            ErrorListProvider errorProvider = new ErrorListProvider(ServiceProvider);
-            Task newError = new Task();
-            newError.Category = TaskCategory.Misc;
-            newError.Text = "Some task Text";
-            errorProvider.Tasks.Add(newError);
+            TaskProvider taskProvider = new TaskProvider(ServiceProvider);
+            Task task = new Task();
+            task.Category = TaskCategory.User;
+            task.Text = string.Format("The step \"{0}\" is pending in scenario \"{1}\" for the feature \"{2}\"", stepResult.Name, scenarioResult.Name, featureResult.Name);
+            taskProvider.Tasks.Add(task);
         }
     }
 }
