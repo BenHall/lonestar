@@ -31,7 +31,6 @@ namespace Meerkatalyst.Lonestar
                 {
                     StatusBar = GetService(typeof (SVsStatusbar)) as IVsStatusbar,
                     OutputWindow = GetOutputPane(VSConstants.GUID_OutWindowGeneralPane, "Lonestar"),
-                    TaskList = GetService(typeof(SVsTaskList)) as IVsTaskList,
                     ServiceProvider = this
                 };
 

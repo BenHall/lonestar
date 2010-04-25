@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using EnvDTE;
 using Meerkatalyst.Lonestar.EditorExtension.ResultAdapter.ResultModels;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
@@ -13,10 +12,8 @@ namespace Meerkatalyst.Lonestar.VsIntegration
         public LonestarPackage ServiceProvider { get; set; }
         public IVsStatusbar StatusBar { get; set; }
         public IVsOutputWindowPane OutputWindow { get; set; }
-        public IVsTaskList TaskList { get; set; }
 
         //TODO: Get rid of this approach... hacky
-
         public static StatusController Instance
         {
             get
