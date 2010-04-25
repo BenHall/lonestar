@@ -1,4 +1,3 @@
-) Display executing status in status bar 
 ) Execute all steps in a solution, not just active window
 ) Stream output instead of waiting until it has finished
 ) Display step failure information in an effective fashion

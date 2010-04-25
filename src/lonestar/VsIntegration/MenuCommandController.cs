@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Threading;
 using Meerkatalyst.Lonestar.EditorExtension.Interaction;
 using Meerkatalyst.Lonestar.EditorExtension.ResultAdapter.ResultModels;
 using Microsoft.VisualStudio.Shell;
@@ -19,29 +18,37 @@ namespace Meerkatalyst.Lonestar.VsIntegration
 
         public void RunLonestarOnActiveView(object sender, EventArgs e)
         {
-            List<FeatureResult> featureResults = null;
-
             ActiveWindowManager activeWindowManager = new ActiveWindowManager(Package);
 
             BackgroundWorker worker = new BackgroundWorker();
-            worker.DoWork += RunLonestarOnThread;
+            worker.DoWork += ExecuteOnThread;
             worker.RunWorkerCompleted += (o, args) =>
                                              {
-                                                 featureResults = args.Result as List<FeatureResult>;
+                                                 var featureResults = args.Result as List<FeatureResult>;
                                                  WpfUIController uiController = new WpfUIController();
                                                  uiController.UpdateUI(activeWindowManager.GetActiveView(), featureResults);
                                              };
+
             worker.RunWorkerAsync(activeWindowManager.GetPathToActiveDocument());    
         }
         
-        private void RunLonestarOnThread(object sender, DoWorkEventArgs e)
+        private static void ExecuteOnThread(object sender, DoWorkEventArgs e)
         {
             var activeDocument = e.Argument as string;
 
             ExecutionController executionController = new ExecutionController();
+            executionController.UpdatedStatus += UpdateStatusBar;
             List<FeatureResult> featureResults = executionController.Execute(activeDocument);
 
             e.Result = featureResults;
+        }
+
+        private static void UpdateStatusBar(object sender, StatusEventArgs e)
+        {
+            if(e.Clear)
+                ShellController.Instance.ClearStatusBar();
+            else
+                ShellController.Instance.WriteToStatusBar(e.Message);
         }
     }
 }

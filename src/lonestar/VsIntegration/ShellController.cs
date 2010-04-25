@@ -1,7 +1,7 @@
 using System;
 using Microsoft.VisualStudio.Shell.Interop;
 
-namespace Meerkatalyst.Lonestar.EditorExtension.Interaction
+namespace Meerkatalyst.Lonestar.VsIntegration
 {
     public class ShellController
     {
