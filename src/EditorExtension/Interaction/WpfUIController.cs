@@ -47,10 +47,14 @@ namespace Meerkatalyst.Lonestar.EditorExtension.Interaction
                         }
                     }
                     builder.AppendLine(string.Format("\tScenario: {0} {1}", scenarioResult.Name, passed ? "passed" : "failed"));
+                    
                 }
             }
-            string summary = builder.ToString();
             string message = string.Format("Execution Result {0}. Passed {1}, Failed {2}, Pendiung {3}", (stepsFailed > 0 || stepsPending > 0) ? "passed" : "failed", stepsPassed, stepsFailed, stepsPending);
+
+            builder.AppendLine();
+            builder.AppendLine(message);
+            string summary = builder.ToString();
             OnUpdatedStatus(new StatusEventArgs{Message = message, Summary = summary});
         }
     }
