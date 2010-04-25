@@ -26,7 +26,10 @@ namespace Meerkatalyst.Lonestar.VsIntegration
                                              {
                                                  var featureResults = args.Result as List<FeatureResult>;
                                                  WpfUIController uiController = new WpfUIController();
+                                                 uiController.UpdatedStatus += UpdateStatus;
                                                  uiController.UpdateUI(activeWindowManager.GetActiveView(), featureResults);
+                                                 uiController.UpdateStatusWithSummary(featureResults);
+                                                 StatusController.Instance.UpdateListsWithResults(featureResults);
                                              };
 
             worker.RunWorkerAsync(activeWindowManager.GetPathToActiveDocument());    
@@ -37,18 +40,16 @@ namespace Meerkatalyst.Lonestar.VsIntegration
             var activeDocument = e.Argument as string;
 
             ExecutionController executionController = new ExecutionController();
-            executionController.UpdatedStatus += UpdateStatusBar;
+            executionController.UpdatedStatus += UpdateStatus;
             List<FeatureResult> featureResults = executionController.Execute(activeDocument);
 
             e.Result = featureResults;
         }
 
-        private static void UpdateStatusBar(object sender, StatusEventArgs e)
+        private static void UpdateStatus(object sender, StatusEventArgs e)
         {
-            if(e.Clear)
-                ShellController.Instance.ClearStatusBar();
-            else
-                ShellController.Instance.WriteToStatusBar(e.Message);
+            StatusController.Instance.WriteToStatusBar(e.Message);
+            StatusController.Instance.WriteToOutputWindow(e.Summary);
         }
     }
 }

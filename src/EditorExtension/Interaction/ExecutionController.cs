@@ -4,11 +4,8 @@ using Meerkatalyst.Lonestar.EditorExtension.ResultAdapter.ResultModels;
 
 namespace Meerkatalyst.Lonestar.EditorExtension.Interaction
 {
-    public class ExecutionController
+    public class ExecutionController : StatusUpdater
     {
-        public delegate void UpdatedStatusEventHandler(object sender, StatusEventArgs e);
-        public event UpdatedStatusEventHandler UpdatedStatus;
-
         public List<FeatureResult> Execute(string file)
         {
             IResultsProvider resultsProvider = GetProvider(file);
@@ -25,18 +22,5 @@ namespace Meerkatalyst.Lonestar.EditorExtension.Interaction
         {
             return new Cucumber(file);
         }
-
-        protected virtual void OnUpdatedStatus(StatusEventArgs e)
-        {
-            if (UpdatedStatus != null)
-                UpdatedStatus(this, e);
-        }
-
-    }
-
-    public class StatusEventArgs
-    {
-        public string Message { get; set; }
-        public bool Clear { get; set; }
     }
 }

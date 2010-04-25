@@ -131,7 +131,7 @@
     <Compile Include="LonestarPackage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\PkgCmdID.cs" />
-    <Compile Include="VsIntegration\ShellController.cs" />
+    <Compile Include="VsIntegration\StatusController.cs" />
     <Compile Include="VsIntegration\TextViewCreationListener.cs" />
     <Compile Include="VsIntegration\WindowController.cs" />
   </ItemGroup>
