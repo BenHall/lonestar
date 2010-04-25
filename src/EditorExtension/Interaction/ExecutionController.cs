@@ -1,11 +1,10 @@
 ﻿using System.Collections.Generic;
 using Meerkatalyst.Lonestar.EditorExtension.Execution;
 using Meerkatalyst.Lonestar.EditorExtension.ResultAdapter.ResultModels;
-using Microsoft.VisualStudio.Text.Editor;
 
 namespace Meerkatalyst.Lonestar.EditorExtension.Interaction
 {
-    public class CommandController
+    public class ExecutionController
     {
         public List<FeatureResult> Execute(string file)
         {
@@ -22,12 +21,6 @@ namespace Meerkatalyst.Lonestar.EditorExtension.Interaction
         private IResultsProvider GetProvider(string file)
         {
             return new Cucumber(file);
-        }
-
-        public void UpdateUI(IWpfTextView wpfTextView, List<FeatureResult> featureResults)
-        {
-            EditorHighlighter editorHighlighter = new EditorHighlighter(wpfTextView);
-            editorHighlighter.HighlightFeatureFileWithResults(featureResults);
         }
     }
 }

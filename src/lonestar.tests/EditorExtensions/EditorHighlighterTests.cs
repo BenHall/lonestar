@@ -19,7 +19,6 @@ namespace lonestar.tests.EditorExtensions
             EditorHighlighter editor = new EditorHighlighter(stubView);
             editor.HighlightFeatureFileWithResults(new List<FeatureResult>());
 
-            stubLayer.AssertWasCalled(l => l.RemoveAllAdornments());
             stubLayer.AssertWasCalled(l => l.RemoveAdornmentsByTag("ResultMarker"));
         }
 

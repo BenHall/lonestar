@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Threading;
 using Meerkatalyst.Lonestar.EditorExtension.Interaction;
 using Meerkatalyst.Lonestar.EditorExtension.ResultAdapter.ResultModels;
 using Microsoft.VisualStudio.Shell;
@@ -17,11 +19,29 @@ namespace Meerkatalyst.Lonestar.VsIntegration
 
         public void RunLonestarOnActiveView(object sender, EventArgs e)
         {
-            CommandController controller = new CommandController(); 
+            List<FeatureResult> featureResults = null;
+
             ActiveWindowManager activeWindowManager = new ActiveWindowManager(Package);
 
-            List<FeatureResult> featureResults = controller.Execute(activeWindowManager.GetPathToActiveDocument());
-            controller.UpdateUI(activeWindowManager.GetActiveView(), featureResults);
+            BackgroundWorker worker = new BackgroundWorker();
+            worker.DoWork += RunLonestarOnThread;
+            worker.RunWorkerCompleted += (o, args) =>
+                                             {
+                                                 featureResults = args.Result as List<FeatureResult>;
+                                                 WpfUIController uiController = new WpfUIController();
+                                                 uiController.UpdateUI(activeWindowManager.GetActiveView(), featureResults);
+                                             };
+            worker.RunWorkerAsync(activeWindowManager.GetPathToActiveDocument());    
+        }
+        
+        private void RunLonestarOnThread(object sender, DoWorkEventArgs e)
+        {
+            var activeDocument = e.Argument as string;
+
+            ExecutionController executionController = new ExecutionController();
+            List<FeatureResult> featureResults = executionController.Execute(activeDocument);
+
+            e.Result = featureResults;
         }
     }
 }
