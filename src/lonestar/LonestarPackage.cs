@@ -44,10 +44,14 @@ namespace Meerkatalyst.Lonestar
 
         private void CreateMenuCommands(OleMenuCommandService mcs)
         {
-            CommandID runLonestarMenuCommandID = new CommandID(GuidList.guidLonestarCmdSet, (int)PkgCmdIDList.runLonestar);
+            CommandID runLonestarOnActiveViewMenuCommandID = new CommandID(GuidList.guidLonestarCmdSet, (int)PkgCmdIDList.runLonestarOnActiveView);
+            CommandID runLonestarOnSolutionMenuCommandID = new CommandID(GuidList.guidLonestarCmdSet, (int)PkgCmdIDList.runLonestarOnSolution);
             MenuCommandController controller = new MenuCommandController(this);
-            MenuCommand menuItem = new MenuCommand(controller.RunLonestarOnActiveView, runLonestarMenuCommandID);
+            MenuCommand menuItem = new MenuCommand(controller.RunLonestarOnActiveView, runLonestarOnActiveViewMenuCommandID);
             mcs.AddCommand(menuItem);
+
+            MenuCommand runOnSolution = new MenuCommand(controller.RunLonestarOnSolution, runLonestarOnSolutionMenuCommandID);
+            mcs.AddCommand(runOnSolution);
         }
 
         private void CreateToolWindows(OleMenuCommandService mcs)

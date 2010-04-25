@@ -19,8 +19,8 @@
       <Menu guid="guidLonestarCmdSet" id="TopLevelMenu" priority="0x100" type="Menu">
         <Parent guid="guidSHLMainMenu" id="IDG_VS_MM_TOOLSADDINS" />
         <Strings>
-          <ButtonText>Meerkatalyst</ButtonText>
-          <CommandName>Meerkatalyst</CommandName>
+          <ButtonText>Lonestar</ButtonText>
+          <CommandName>Lonestar</CommandName>
         </Strings>
       </Menu>
     </Menus>
@@ -30,11 +30,19 @@
         <Icon guid="guidImages" id="bmpPic1" />
         <Strings>
           <CommandName>runLonestar</CommandName>
-          <ButtonText>Run Lonestar</ButtonText>
+          <ButtonText>Run on active window</ButtonText>
+        </Strings>
+      </Button>
+      <Button guid="guidLonestarCmdSet" id="runLonestarOnSolution" priority="0x0101" type="Button">
+        <Parent guid="guidLonestarCmdSet" id="MyMenuGroup" />
+        <Icon guid="guidImages" id="bmpPicSearch" />
+        <Strings>
+          <CommandName>runLonestarOnSolution</CommandName>
+          <ButtonText>Run on solution</ButtonText>
         </Strings>
       </Button>
 
-      <!--<Button guid="guidLonestarCmdSet" id="resultsWindow" priority="0x0100" type="Button">
+      <!--<Button guid="guidLonestarCmdSet" id="resultsWindow" priority="0x0102" type="Button">
         <Parent guid="guidLonestarCmdSet" id="MyMenuGroup" />
         <Icon guid="guidImages" id="bmpPic2" />
         <Strings>
@@ -60,6 +68,7 @@
       <IDSymbol name="MyMenuGroup" value="0x1020" />
       <IDSymbol name="runLonestar" value="0x0100" />
       <IDSymbol name="resultsWindow" value="0x0101" />
+      <IDSymbol name="runLonestarOnSolution" value="0x0102" />
     </GuidSymbol>
     
     <GuidSymbol name="guidImages" value="{8b7e6c7a-7662-4e56-a6ef-b71797b51561}" >

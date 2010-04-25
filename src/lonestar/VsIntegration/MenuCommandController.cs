@@ -34,7 +34,12 @@ namespace Meerkatalyst.Lonestar.VsIntegration
 
             worker.RunWorkerAsync(activeWindowManager.GetPathToActiveDocument());    
         }
-        
+
+        public void RunLonestarOnSolution(object sender, EventArgs e)
+        {
+            throw new NotImplementedException();
+        }
+
         private static void ExecuteOnThread(object sender, DoWorkEventArgs e)
         {
             var activeDocument = e.Argument as string;
