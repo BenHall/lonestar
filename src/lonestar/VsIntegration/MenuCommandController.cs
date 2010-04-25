@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Meerkatalyst.Lonestar.EditorExtension;
 using Meerkatalyst.Lonestar.EditorExtension.Interaction;
 using Meerkatalyst.Lonestar.EditorExtension.ResultAdapter.ResultModels;
 using Microsoft.VisualStudio.Shell;
@@ -20,7 +19,8 @@ namespace Meerkatalyst.Lonestar.VsIntegration
         {
             CommandController controller = new CommandController(); 
             ActiveWindowManager activeWindowManager = new ActiveWindowManager(Package);
-            List<FeatureResult> featureResults = controller.ExecuteCucumber(activeWindowManager.GetPathToActiveDocument());
+
+            List<FeatureResult> featureResults = controller.Execute(activeWindowManager.GetPathToActiveDocument());
             controller.UpdateUI(activeWindowManager.GetActiveView(), featureResults);
         }
     }

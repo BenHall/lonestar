@@ -1,11 +1,14 @@
-﻿using System.Data;
+﻿using System.Collections.Generic;
+using System.Data;
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
+using Meerkatalyst.Lonestar.EditorExtension.ResultAdapter;
+using Meerkatalyst.Lonestar.EditorExtension.ResultAdapter.ResultModels;
 
 namespace Meerkatalyst.Lonestar.EditorExtension.Execution
 {
-    public class Cucumber
+    public class Cucumber : IResultsProvider
     {
         private const string FORMATTER_FILE_NAME = "basic_info.rb";
         private const string FORMATTERS_DIRECTORY = "Formatters";
@@ -22,6 +25,12 @@ namespace Meerkatalyst.Lonestar.EditorExtension.Execution
             string result = Start(GetRubyInterpreter(), GetArguments());
 
             return result;
+        }
+
+        public List<FeatureResult> ConvertResult(string result)
+        {
+            ConvertOutputToObjectModel converter = new ConvertOutputToObjectModel();
+            return converter.Convert(result);
         }
 
         private string Start(string command, string arguments)

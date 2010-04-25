@@ -12,7 +12,7 @@ namespace Meerkatalyst.Lonestar.EditorExtension.Interaction
 {
     public class EditorHighlighter
     {
-        private const string RESULT_MARKER = "ResultMarker";
+        private const string RESULT_MARKER_LAYER = "ResultMarker";
         IAdornmentLayer _layer;
         IWpfTextView _view;
 
@@ -24,27 +24,32 @@ namespace Meerkatalyst.Lonestar.EditorExtension.Interaction
 
         public void HighlightFeatureFileWithResults(IEnumerable<FeatureResult> featureResults)
         {
-            _layer.RemoveAllAdornments();
-            _layer.RemoveAdornmentsByTag(RESULT_MARKER);
+            RemoveExistingLayers();
             foreach (FeatureResult featureResult in featureResults)
             {
                 foreach (ScenarioResult scenarioResult in featureResult.ScenarioResults)
                 {
-                    HighlightScenarioStepsWithResults(scenarioResult);
+                    HighlightUIWithResults(scenarioResult);
                 }
             }
         }
 
-        private void HighlightScenarioStepsWithResults(ScenarioResult scenarioResult)
+        private void RemoveExistingLayers()
         {
-            foreach (IWpfTextViewLine line in _view.TextViewLines.WpfTextViewLines)
+            _layer.RemoveAllAdornments();
+            _layer.RemoveAdornmentsByTag(RESULT_MARKER_LAYER);
+        }
+
+        private void HighlightUIWithResults(ScenarioResult scenarioResult)
+        {
+            foreach (IWpfTextViewLine uiLine in _view.TextViewLines.WpfTextViewLines)
             {
-                var lineSpan = CreateSpan(line);
-                StepResult stepResult = GetResultForLine(lineSpan, scenarioResult.StepResults);
+                var currentLine = CreateSnapshotSpanForCurrentLine(uiLine);
+                StepResult stepResult = GetResultForLine(currentLine, scenarioResult.StepResults);
                 if (stepResult != null)
                 {
-                    LineResultMarker resultMarker = GetResultMarker(stepResult.Result);
-                    HighlightLine(lineSpan, resultMarker);
+                    LineResultMarker resultMarker = LineResultMarker.GetResultMarker(stepResult.Result);
+                    HighlightLine(currentLine, resultMarker);
                 }
             }
         }
@@ -65,46 +70,25 @@ namespace Meerkatalyst.Lonestar.EditorExtension.Interaction
                 Canvas.SetLeft(highlight, geometry.Bounds.Left);
                 Canvas.SetTop(highlight, geometry.Bounds.Top);
 
-                _layer.AddAdornment(AdornmentPositioningBehavior.TextRelative, line, RESULT_MARKER, highlight, null);
+                _layer.AddAdornment(AdornmentPositioningBehavior.TextRelative, line, RESULT_MARKER_LAYER, highlight, null);
             }
         }
 
         private Image CreateImageToHighlightLine(Geometry geometry, LineResultMarker marker)
         {
-            GeometryDrawing drawing = new GeometryDrawing(marker.Fill, marker.Outline, geometry);
-            drawing.Freeze();
+            GeometryDrawing backgroundGeometry = new GeometryDrawing(marker.Fill, marker.Outline, geometry);
+            backgroundGeometry.Freeze();
 
-            DrawingImage drawingImage = new DrawingImage(drawing);
-            drawingImage.Freeze();
+            DrawingImage backgroundDrawning = new DrawingImage(backgroundGeometry);
+            backgroundDrawning.Freeze();
 
-            Image image = new Image();
-            image.Source = drawingImage;
-            return image;
+            return new Image {Source = backgroundDrawning};
         }
 
-        private SnapshotSpan CreateSpan(ITextViewLine line)
+        private SnapshotSpan CreateSnapshotSpanForCurrentLine(ITextViewLine line)
         {
-            int start = line.Start;
-            int end = line.End;
-
-            return new SnapshotSpan(_view.TextSnapshot, Span.FromBounds(start, end));
-        }
-
-        private LineResultMarker GetResultMarker(string result)
-        {
-            switch (result)
-            {
-                case "passed":
-                    return new Pass();
-                case "failed":
-                    return new Fail();
-                case "skipped":
-                    return new Skipped();
-                case "pending":
-                    return new Pending();
-            }
-
-            return new Pending();
+            Span lineSpan = Span.FromBounds(line.Start, line.End);
+            return new SnapshotSpan(_view.TextSnapshot, lineSpan);
         }
     }
 }

@@ -15,5 +15,22 @@ namespace Meerkatalyst.Lonestar.EditorExtension.LineResultMarkers
             Outline = new Pen(new SolidColorBrush(baseColour), 0.5);
             Outline.Freeze();
         }
+
+        public static LineResultMarker GetResultMarker(string result)
+        {
+            switch (result)
+            {
+                case "passed":
+                    return new Pass();
+                case "failed":
+                    return new Fail();
+                case "skipped":
+                    return new Skipped();
+                case "pending":
+                    return new Pending();
+            }
+
+            return new Pending();
+        }
     }
 }

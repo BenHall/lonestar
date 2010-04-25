@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using Meerkatalyst.Lonestar.EditorExtension.Execution;
-using Meerkatalyst.Lonestar.EditorExtension.ResultAdapter;
 using Meerkatalyst.Lonestar.EditorExtension.ResultAdapter.ResultModels;
 using Microsoft.VisualStudio.Text.Editor;
 
@@ -8,13 +7,17 @@ namespace Meerkatalyst.Lonestar.EditorExtension.Interaction
 {
     public class CommandController
     {
-        public List<FeatureResult> ExecuteCucumber(string activeFilePath)
+        public List<FeatureResult> Execute(string file)
         {
-            Cucumber cucumber = new Cucumber(activeFilePath);
-            string result = cucumber.Execute();
-            
-            ConvertOutputToObjectModel converter = new ConvertOutputToObjectModel();
-            return converter.Convert(result);
+            IResultsProvider resultsProvider = GetProvider(file);
+            string result = resultsProvider.Execute();
+
+            return resultsProvider.ConvertResult(result);
+        }
+
+        private IResultsProvider GetProvider(string file)
+        {
+            return new Cucumber(file);
         }
 
         public void UpdateUI(IWpfTextView wpfTextView, List<FeatureResult> featureResults)
