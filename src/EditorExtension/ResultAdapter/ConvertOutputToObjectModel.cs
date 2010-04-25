@@ -6,33 +6,39 @@ namespace Meerkatalyst.Lonestar.EditorExtension.ResultAdapter
 {
     public class ConvertOutputToObjectModel
     {
-        public List<FeatureResult> Convert(string result)
-        {
-            string[] lines = GetLinesFromResult(result);
-            
-            List<FeatureResult> featureResults = new List<FeatureResult>();
-            FeatureResult featureResult = new FeatureResult();
-            ScenarioResult scenarioResult = new ScenarioResult();
+        private const string FEATURE_STARTED = "feature_name";
+        private const string FEATURE_COMPLETED = "feature_done";
+        private const string SCENARIO_STARTED = "scenario_name";
+        private const string STEP_RESULT = "after_step_result";
+        private const string SCENARIO_DONE = "steps_done";
 
-            for (int index = 0; index < lines.Length; index++)
+        public List<FeatureResult> Convert(string rawOutput)
+        {
+            string[] results = GetLinesFromOutput(rawOutput);
+
+            List<FeatureResult> featureResults = new List<FeatureResult>();
+            FeatureResult featureResult = null;
+            ScenarioResult scenarioResult = null;
+
+            for (int index = 0; index < results.Length; index++)
             {
-                var resultLine = lines[index].Trim();
-                switch(resultLine)
+                var resultLine = results[index].Trim();
+                switch (resultLine)
                 {
-                    case("feature_name"):
-                        featureResult.Name = lines[++index];
+                    case (FEATURE_STARTED):
+                        featureResult = new FeatureResult { Name = results[++index] };
                         break;
-                    case("feature_done"):
-                       featureResults.Add(featureResult);
+                    case (FEATURE_COMPLETED):
+                        featureResults.Add(featureResult);
                         break;
-                    case ("scenario_name"):
-                        scenarioResult = new ScenarioResult {Name = lines[++index]};
+                    case (SCENARIO_STARTED):
+                        scenarioResult = new ScenarioResult { Name = results[++index] };
                         break;
-                    case("after_step_result"):
-                        var stepResult = CreateStepResult(index, lines);
+                    case (STEP_RESULT):
+                        var stepResult = CreateStepResult(index, results);
                         scenarioResult.StepResults.Add(stepResult);
                         break;
-                    case("steps_done"):
+                    case (SCENARIO_DONE):
                         featureResult.ScenarioResults.Add(scenarioResult);
                         break;
                 }
@@ -41,7 +47,7 @@ namespace Meerkatalyst.Lonestar.EditorExtension.ResultAdapter
             return featureResults;
         }
 
-        private string[] GetLinesFromResult(string result)
+        private string[] GetLinesFromOutput(string result)
         {
             return Regex.Split(result, "\n");
         }
