@@ -15,6 +15,11 @@ namespace Meerkatalyst.Lonestar.EditorExtension.Execution
         private const string FORMATTER_CLASS_NAME = "Meerkatalyst::Lonestar::BasicInfo";
         public string FeatureFile { get; set; }
 
+        public string StatusMessage
+        {
+            get { return string.Format("Executing Cucumber for file {0}", FeatureFile); }
+        }
+
         public Cucumber(string featureFile)
         {
             FeatureFile = featureFile;

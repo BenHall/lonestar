@@ -9,17 +9,17 @@ namespace Meerkatalyst.Lonestar.VsIntegration
     [ContentType("text")]
     [FileExtension(".feature")]
     [TextViewRole(PredefinedTextViewRoles.Document)]
-    internal sealed class TextViewCreationListener : IWpfTextViewCreationListener
+    internal sealed class IntellisenseViewCreationListener : IWpfTextViewCreationListener
     {
         [Export(typeof(AdornmentLayerDefinition))]
-        [Name("EditorHighlighter")]
+        [Name("StepsIntellisense")]
         [Order(After = PredefinedAdornmentLayers.Selection)]
         [TextViewRole(PredefinedTextViewRoles.Document)]
         private AdornmentLayerDefinition editorAdornmentLayer;
 
         public void TextViewCreated(IWpfTextView textView)
         {
-            new EditorHighlighter(textView);
+            new StepsIntellisense(textView);
         }
     }
 }

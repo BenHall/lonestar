@@ -10,21 +10,21 @@ using Microsoft.VisualStudio.Text.Formatting;
 
 namespace Meerkatalyst.Lonestar.EditorExtension.Interaction
 {
-    public class EditorHighlighter
+    public sealed class EditorHighlighter : VsTextViewInteractions
     {
         private const string RESULT_MARKER_LAYER = "ResultMarker";
-        IAdornmentLayer _layer;
-        IWpfTextView _view;
+        protected override IWpfTextView View { set; get; }
+        protected override IAdornmentLayer Layer { get; set; }
 
         public EditorHighlighter(IWpfTextView view)
         {
-            _view = view;
-            _layer = view.GetAdornmentLayer("EditorHighlighter");
+            View = view;
+            Layer = view.GetAdornmentLayer("EditorHighlighter");
         }
 
         public void HighlightFeatureFileWithResults(IEnumerable<FeatureResult> featureResults)
         {
-            RemoveExistingLayers();
+            Layer.RemoveAdornmentsByTag(RESULT_MARKER_LAYER);
             foreach (FeatureResult featureResult in featureResults)
             {
                 foreach (ScenarioResult scenarioResult in featureResult.ScenarioResults)
@@ -34,15 +34,9 @@ namespace Meerkatalyst.Lonestar.EditorExtension.Interaction
             }
         }
 
-        private void RemoveExistingLayers()
-        {
-            _layer.RemoveAllAdornments();
-            _layer.RemoveAdornmentsByTag(RESULT_MARKER_LAYER);
-        }
-
         private void HighlightUIWithResults(ScenarioResult scenarioResult)
         {
-            foreach (IWpfTextViewLine uiLine in _view.TextViewLines.WpfTextViewLines)
+            foreach (IWpfTextViewLine uiLine in View.TextViewLines.WpfTextViewLines)
             {
                 var currentLine = CreateSnapshotSpanForCurrentLine(uiLine);
                 StepResult stepResult = GetResultForLine(currentLine, scenarioResult.StepResults);
@@ -61,7 +55,7 @@ namespace Meerkatalyst.Lonestar.EditorExtension.Interaction
 
         public void HighlightLine(SnapshotSpan line, LineResultMarker marker)
         {
-            IWpfTextViewLineCollection textViewLines = _view.TextViewLines;
+            IWpfTextViewLineCollection textViewLines = View.TextViewLines;
             Geometry geometry = textViewLines.GetMarkerGeometry(line);
             if (geometry != null)
             {
@@ -70,7 +64,7 @@ namespace Meerkatalyst.Lonestar.EditorExtension.Interaction
                 Canvas.SetLeft(highlight, geometry.Bounds.Left);
                 Canvas.SetTop(highlight, geometry.Bounds.Top);
 
-                _layer.AddAdornment(AdornmentPositioningBehavior.TextRelative, line, RESULT_MARKER_LAYER, highlight, null);
+                Layer.AddAdornment(AdornmentPositioningBehavior.TextRelative, line, RESULT_MARKER_LAYER, highlight, null);
             }
         }
 
@@ -83,12 +77,6 @@ namespace Meerkatalyst.Lonestar.EditorExtension.Interaction
             backgroundDrawning.Freeze();
 
             return new Image {Source = backgroundDrawning};
-        }
-
-        private SnapshotSpan CreateSnapshotSpanForCurrentLine(ITextViewLine line)
-        {
-            Span lineSpan = Span.FromBounds(line.Start, line.End);
-            return new SnapshotSpan(_view.TextSnapshot, lineSpan);
         }
     }
 }

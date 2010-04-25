@@ -7,5 +7,6 @@ namespace Meerkatalyst.Lonestar.EditorExtension.Execution
     {
         string Execute();
         List<FeatureResult> ConvertResult(string result);
+        string StatusMessage { get; }
     }
 }

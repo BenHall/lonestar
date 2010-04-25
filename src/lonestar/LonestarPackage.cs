@@ -2,9 +2,11 @@
 using System.Globalization;
 using System.Runtime.InteropServices;
 using System.ComponentModel.Design;
+using Meerkatalyst.Lonestar.EditorExtension.Interaction;
 using Meerkatalyst.Lonestar.Properties;
 using Meerkatalyst.Lonestar.VsIntegration;
 using Microsoft.VisualStudio.Shell;
+using Microsoft.VisualStudio.Shell.Interop;
 
 namespace Meerkatalyst.Lonestar
 {
@@ -25,6 +27,10 @@ namespace Meerkatalyst.Lonestar
             Trace.WriteLine (string.Format(CultureInfo.CurrentCulture, "Entering Initialize() of: {0}", this));
             base.Initialize();
 
+
+            ShellController controller = new ShellController();
+            controller.SetStatusBar(GetService(typeof (SVsStatusbar)) as IVsStatusbar);
+            
             OleMenuCommandService mcs = GetService(typeof(IMenuCommandService)) as OleMenuCommandService;
             if ( null != mcs )
             {

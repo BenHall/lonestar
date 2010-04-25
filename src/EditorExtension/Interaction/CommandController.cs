@@ -10,9 +10,13 @@ namespace Meerkatalyst.Lonestar.EditorExtension.Interaction
         public List<FeatureResult> Execute(string file)
         {
             IResultsProvider resultsProvider = GetProvider(file);
-            string result = resultsProvider.Execute();
+            ShellController.Instance.WriteToStatusBar(resultsProvider.StatusMessage);
 
-            return resultsProvider.ConvertResult(result);
+            string result = resultsProvider.Execute();
+            List<FeatureResult> featureResults = resultsProvider.ConvertResult(result);
+
+            ShellController.Instance.ClearStatusBar();
+            return featureResults;
         }
 
         private IResultsProvider GetProvider(string file)

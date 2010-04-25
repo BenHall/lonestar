@@ -131,6 +131,9 @@
     <Compile Include="Execution\IResultsProvider.cs" />
     <Compile Include="Interaction\CommandController.cs" />
     <Compile Include="Execution\Cucumber.cs" />
+    <Compile Include="Interaction\ShellController.cs" />
+    <Compile Include="Interaction\StepsIntellisense.cs" />
+    <Compile Include="Interaction\VsTextViewInteractions.cs" />
     <Compile Include="LineResultMarkers\Skipped.cs" />
     <Compile Include="LineResultMarkers\Fail.cs" />
     <Compile Include="LineResultMarkers\LineResultMarker.cs" />
