@@ -1,4 +1,6 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
+using System.Reflection;
 using EnvDTE;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Text.Editor;
@@ -32,12 +34,26 @@ namespace Meerkatalyst.Lonestar.VsIntegration
                 
             textManager.GetActiveView(0, null, out currentTextView);
 
+            if(currentTextView == null)
+                return null;
+
             return GetWpfView(currentTextView) as IWpfTextView;
         }
 
         private static object GetWpfView(IVsTextView currentTextView)
         {
-            return currentTextView.GetType().GetProperty("WpfTextView").GetValue(currentTextView, null);
+            PropertyInfo property = currentTextView.GetType().GetProperty("WpfTextView");
+            if (property == null)
+                return null;
+
+            return property.GetValue(currentTextView, null);
+        }
+
+        public string GetPathToSolution()
+        {
+            DTE dte = Package.GetGlobalService(typeof(DTE)) as DTE;
+
+            return Path.GetDirectoryName(dte.Solution.FileName);
         }
     }
 }

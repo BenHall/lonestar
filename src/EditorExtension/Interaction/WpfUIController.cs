@@ -9,6 +9,8 @@ namespace Meerkatalyst.Lonestar.EditorExtension.Interaction
     {
         public void UpdateUI(IWpfTextView wpfTextView, List<FeatureResult> featureResults)
         {
+            if (wpfTextView == null) return;
+            
             EditorHighlighter editorHighlighter = new EditorHighlighter(wpfTextView);
             editorHighlighter.HighlightFeatureFileWithResults(featureResults);
         }

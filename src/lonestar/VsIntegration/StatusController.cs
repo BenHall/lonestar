@@ -76,20 +76,30 @@ namespace Meerkatalyst.Lonestar.VsIntegration
 
         private void AddStepToErrorList(FeatureResult featureResult, ScenarioResult scenarioResult, StepResult stepResult)
         {
-            ErrorListProvider errorProvider = new ErrorListProvider(ServiceProvider);
-            ErrorTask error = new ErrorTask();
-            error.Category = TaskCategory.BuildCompile;
-            error.Text = string.Format("The step \"{0}\" failed in scenario \"{1}\" for the feature \"{2}\"", stepResult.Name, scenarioResult.Name, featureResult.Name);
-            errorProvider.Tasks.Add(error);
+            try
+            {
+                ErrorListProvider errorProvider = new ErrorListProvider(ServiceProvider);
+                ErrorTask error = new ErrorTask();
+                error.Category = TaskCategory.BuildCompile;
+                error.Text = string.Format("The step \"{0}\" failed in scenario \"{1}\" for the feature \"{2}\"", stepResult.Name, scenarioResult.Name, featureResult.Name);
+                errorProvider.Tasks.Add(error);
+            }
+            catch (InvalidOperationException)
+            { }
         }
 
         private void AddStepToTaskList(FeatureResult featureResult, ScenarioResult scenarioResult, StepResult stepResult)
         {
-            TaskProvider taskProvider = new TaskProvider(ServiceProvider);
-            Task task = new Task();
-            task.Category = TaskCategory.User;
-            task.Text = string.Format("The step \"{0}\" is pending in scenario \"{1}\" for the feature \"{2}\"", stepResult.Name, scenarioResult.Name, featureResult.Name);
-            taskProvider.Tasks.Add(task);
+            try
+            {
+                TaskProvider taskProvider = new TaskProvider(ServiceProvider);
+                Task task = new Task();
+                task.Category = TaskCategory.User;
+                task.Text = string.Format("The step \"{0}\" is pending in scenario \"{1}\" for the feature \"{2}\"", stepResult.Name, scenarioResult.Name, featureResult.Name);
+                taskProvider.Tasks.Add(task);
+            }
+            catch (InvalidOperationException)
+            { }
         }
     }
 }
