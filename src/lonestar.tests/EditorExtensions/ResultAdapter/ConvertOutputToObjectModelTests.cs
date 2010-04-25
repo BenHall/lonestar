@@ -58,7 +58,7 @@ feature_done";
         {
             ConvertOutputToObjectModel model = new ConvertOutputToObjectModel();
             List<FeatureResult> featureResults = model.Convert(result);
-            Assert.Equal("undefined", featureResults[0].ScenarioResults[0].StepResults[0].Result);
+            Assert.Equal("undefined", featureResults[0].ScenarioResults[0].StepResults[0].ResultText);
         }
 
         [Fact]

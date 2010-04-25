@@ -49,7 +49,7 @@ namespace lonestar.tests.EditorExtensions
 
             StepResult stepResult = new StepResult();
             stepResult.Name = "Test";
-            stepResult.Result = "passed";
+            stepResult.ResultText = "passed";
 
             scenarioResult.StepResults.Add(stepResult);
 

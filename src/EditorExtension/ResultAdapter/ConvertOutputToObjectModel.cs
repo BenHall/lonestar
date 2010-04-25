@@ -56,7 +56,7 @@ namespace Meerkatalyst.Lonestar.EditorExtension.ResultAdapter
         {
             StepResult stepResult = new StepResult();
             stepResult.Name = lines[++index].Trim();
-            stepResult.Result = lines[++index].Trim();
+            stepResult.ResultText = lines[++index].Trim();
             return stepResult;
         }
     }

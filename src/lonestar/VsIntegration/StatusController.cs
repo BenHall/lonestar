@@ -56,6 +56,7 @@ namespace Meerkatalyst.Lonestar.VsIntegration
             OutputWindow.Activate();
         }
 
+        //TODO: Refactor this, feels like it's in the wrong place
         public void UpdateListsWithResults(List<FeatureResult> featureResults)
         {
             foreach (FeatureResult featureResult in featureResults)
@@ -64,9 +65,9 @@ namespace Meerkatalyst.Lonestar.VsIntegration
                 {
                     foreach (StepResult stepResult in scenario.StepResults)
                     {
-                        if (stepResult.Result == "failed")
+                        if (stepResult.ResultText == "failed")
                             AddStepToErrorList(featureResult, scenario, stepResult);
-                        else if (stepResult.Result == "pending")
+                        else if (stepResult.ResultText == "pending")
                             AddStepToTaskList(featureResult, scenario, stepResult);
                     }
                 }

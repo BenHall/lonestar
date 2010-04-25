@@ -1,4 +1,5 @@
 ﻿using System.Windows.Media;
+using Meerkatalyst.Lonestar.EditorExtension.ResultAdapter.ResultModels;
 
 namespace Meerkatalyst.Lonestar.EditorExtension.LineResultMarkers
 {
@@ -16,17 +17,17 @@ namespace Meerkatalyst.Lonestar.EditorExtension.LineResultMarkers
             Outline.Freeze();
         }
 
-        public static LineResultMarker GetResultMarker(string result)
+        public static LineResultMarker GetResultMarker(Result result)
         {
             switch (result)
             {
-                case "passed":
+                case Result.Passed:
                     return new Pass();
-                case "failed":
+                case Result.Failed:
                     return new Fail();
-                case "skipped":
+                case Result.Skipped:
                     return new Skipped();
-                case "pending":
+                case Result.Pending:
                     return new Pending();
             }
 
