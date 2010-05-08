@@ -1,6 +1,4 @@
-﻿using Meerkatalyst.Lonestar.EditorExtension.Interaction.Processors;
-
-namespace Meerkatalyst.Lonestar.EditorExtension.Interaction.IntellisenseWindow
+﻿namespace Meerkatalyst.Lonestar.EditorExtension.Interaction.IntellisenseWindow
 {
     public partial class IntelliSenseControl
     {
