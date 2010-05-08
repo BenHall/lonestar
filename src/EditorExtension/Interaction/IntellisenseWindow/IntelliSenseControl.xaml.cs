@@ -1,7 +1,4 @@
-﻿using System;
-using System.Windows.Controls;
-
-namespace Meerkatalyst.Lonestar.EditorExtension.Interaction.IntellisenseWindow
+﻿namespace Meerkatalyst.Lonestar.EditorExtension.Interaction.IntellisenseWindow
 {
     public partial class IntelliSenseControl
     {
@@ -13,6 +10,8 @@ namespace Meerkatalyst.Lonestar.EditorExtension.Interaction.IntellisenseWindow
         public void HighlightItem(string text)
         {
             listBox1.Items.Add(text);
+            listBox1.SelectedItem = text;
+            listBox1.ScrollIntoView(text);
         }
 
         public void ChangeSelection(HighlightedSelectionAction selectedAction)
@@ -23,22 +22,20 @@ namespace Meerkatalyst.Lonestar.EditorExtension.Interaction.IntellisenseWindow
             {
                 case HighlightedSelectionAction.Up:
                     if (selectedIndex == 0)
-                    {
                         listBox1.SelectedIndex = (listBox1.Items.Count - 1);
-                        listBox1.ScrollIntoView(listBox1.SelectedIndex);
-                    }
+                    else
+                        listBox1.SelectedIndex = selectedIndex - 1;
 
-                    listBox1.SelectedIndex--;
+                    listBox1.ScrollIntoView(listBox1.SelectedItem);
                     break;
 
                 case HighlightedSelectionAction.Down:
                     if (selectedIndex == (listBox1.Items.Count - 1))
-                    {
                         listBox1.SelectedIndex = 0;
-                        listBox1.ScrollIntoView(listBox1.SelectedIndex);
-                    }
+                    else
+                        listBox1.SelectedIndex = selectedIndex + 1;
 
-                    listBox1.SelectedIndex++;
+                    listBox1.ScrollIntoView(listBox1.SelectedItem);
                     break;
             }
         }
