@@ -8,7 +8,7 @@ using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.VisualStudio.Text.Formatting;
 
-namespace Meerkatalyst.Lonestar.EditorExtension.Interaction
+namespace Meerkatalyst.Lonestar.EditorExtension.Interaction.Processors
 {
     public sealed class EditorHighlighterProcessor : VsTextViewInteractions
     {

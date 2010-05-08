@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Meerkatalyst.Lonestar.EditorExtension.Interaction;
+using Meerkatalyst.Lonestar.EditorExtension.Interaction.Processors;
 using Meerkatalyst.Lonestar.EditorExtension.ResultAdapter.ResultModels;
 using Microsoft.VisualStudio.Text.Editor;
 using Rhino.Mocks;

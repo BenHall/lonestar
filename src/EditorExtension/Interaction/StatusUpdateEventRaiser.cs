@@ -1,6 +1,6 @@
 ﻿namespace Meerkatalyst.Lonestar.EditorExtension.Interaction
 {
-    public abstract class StatusUpdater
+    public abstract class StatusUpdateEventRaiser
     {
         public delegate void UpdatedStatusEventHandler(object sender, StatusEventArgs e);
         public event UpdatedStatusEventHandler UpdatedStatus;

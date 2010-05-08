@@ -1,13 +1,14 @@
 ﻿using System.Collections.Generic;
 using System.Text;
+using Meerkatalyst.Lonestar.EditorExtension.Interaction.Processors;
 using Meerkatalyst.Lonestar.EditorExtension.ResultAdapter.ResultModels;
 using Microsoft.VisualStudio.Text.Editor;
 
 namespace Meerkatalyst.Lonestar.EditorExtension.Interaction
 {
-    public class WpfUIController : StatusUpdater
+    public class WpfUIStatusUpdater : StatusUpdateEventRaiser
     {
-        public void UpdateUI(IWpfTextView wpfTextView, List<FeatureResult> featureResults)
+        public void UpdateEditor(IWpfTextView wpfTextView, List<FeatureResult> featureResults)
         {
             if (wpfTextView == null) return;
             

@@ -1,9 +1,9 @@
 using System.ComponentModel.Composition;
-using Meerkatalyst.Lonestar.EditorExtension.Interaction;
+using Meerkatalyst.Lonestar.EditorExtension.Interaction.Processors;
 using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.VisualStudio.Utilities;
 
-namespace Meerkatalyst.Lonestar.VsIntegration
+namespace Meerkatalyst.Lonestar.EditorExtension.Interaction.Providers
 {
     [Export(typeof(IKeyProcessorProvider))]
     [Name("Steps Intellisense Processor")]

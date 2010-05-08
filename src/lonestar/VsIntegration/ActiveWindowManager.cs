@@ -1,5 +1,4 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Reflection;
 using EnvDTE;
 using Microsoft.VisualStudio.Shell;
@@ -20,6 +19,9 @@ namespace Meerkatalyst.Lonestar.VsIntegration
         public string GetPathToActiveDocument()
         {
             DTE dte = Package.GetGlobalService(typeof(DTE)) as DTE;
+
+            if (dte == null)
+                return string.Empty;
 
             return Path.Combine(dte.ActiveDocument.Path, dte.ActiveDocument.Name);
         }
@@ -52,6 +54,8 @@ namespace Meerkatalyst.Lonestar.VsIntegration
         public string GetPathToSolution()
         {
             DTE dte = Package.GetGlobalService(typeof(DTE)) as DTE;
+            if (dte == null)
+                return string.Empty;
 
             return Path.GetDirectoryName(dte.Solution.FileName);
         }

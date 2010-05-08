@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using Meerkatalyst.Lonestar.EditorExtension.Execution;
+using Meerkatalyst.Lonestar.EditorExtension.Interaction;
 using Meerkatalyst.Lonestar.EditorExtension.ResultAdapter.ResultModels;
 
-namespace Meerkatalyst.Lonestar.EditorExtension.Interaction
+namespace Meerkatalyst.Lonestar.EditorExtension.Execution
 {
-    public class ExecutionController : StatusUpdater
+    public class ExecutionController : StatusUpdateEventRaiser
     {
         public List<FeatureResult> Execute(string file)
         {
@@ -15,7 +15,7 @@ namespace Meerkatalyst.Lonestar.EditorExtension.Interaction
 
             if (!Supported(file))
                 throw new NotSupportedException(string.Format("Sorry for this path {0} is not supported", file));
-
+            
             IResultsProvider resultsProvider = GetProvider(file);
             OnUpdatedStatus(new StatusEventArgs { Message = resultsProvider.StatusMessage });
 

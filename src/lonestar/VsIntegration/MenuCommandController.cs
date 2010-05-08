@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
+using Meerkatalyst.Lonestar.EditorExtension.Execution;
 using Meerkatalyst.Lonestar.EditorExtension.Interaction;
 using Meerkatalyst.Lonestar.EditorExtension.ResultAdapter.ResultModels;
 using Microsoft.VisualStudio;
@@ -65,10 +66,10 @@ namespace Meerkatalyst.Lonestar.VsIntegration
 
         private void UpdateUI(List<FeatureResult> featureResults, ActiveWindowManager activeWindowManager)
         {
-            WpfUIController uiController = new WpfUIController();
-            uiController.UpdatedStatus += UpdateStatus;
-            uiController.UpdateUI(activeWindowManager.GetActiveView(), featureResults);
-            uiController.UpdateStatusWithSummary(featureResults);
+            WpfUIStatusUpdater uiStatusUpdater = new WpfUIStatusUpdater();
+            uiStatusUpdater.UpdatedStatus += UpdateStatus;
+            uiStatusUpdater.UpdateEditor(activeWindowManager.GetActiveView(), featureResults);
+            uiStatusUpdater.UpdateStatusWithSummary(featureResults);
             _statusController.UpdateListsWithResults(featureResults);
         }
 

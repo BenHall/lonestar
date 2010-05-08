@@ -8,25 +8,10 @@ namespace Meerkatalyst.Lonestar.VsIntegration
 {
     public class StatusController
     {
-        private static StatusController _instance;
         public LonestarPackage ServiceProvider { get; set; }
         public IVsStatusbar StatusBar { get; set; }
         public IVsOutputWindowPane OutputWindow { get; set; }
-
-        //TODO: Get rid of this approach... hacky
-        public static StatusController Instance
-        {
-            get
-            {
-                return _instance;
-            }
-        }
-
-        public StatusController()
-        {
-            _instance = this;
-        }
-
+        
         public void WriteToStatusBar(string message)
         {
             int frozen;

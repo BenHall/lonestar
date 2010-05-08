@@ -6,15 +6,15 @@ using Microsoft.VisualStudio.Text.Editor;
 using System.Windows;
 using Microsoft.VisualStudio.Text.Formatting;
 
-namespace Meerkatalyst.Lonestar.EditorExtension.Interaction
+namespace Meerkatalyst.Lonestar.EditorExtension.Interaction.Processors
 {
     public class StepsIntellisenseProcessor : KeyProcessor
     {
-        private IWpfTextView _view;
-        private bool justMovedCaret = false;
-        private bool hasIntellisenseWindowOpen = false;
-        private IAdornmentLayer _layer;
-        private Selection _intellisenseWindow;
+        private readonly IWpfTextView _view;
+        private bool justMovedCaret;
+        private bool hasIntellisenseWindowOpen;
+        private readonly IAdornmentLayer _layer;
+        private readonly Selection _intellisenseWindow;
 
         public StepsIntellisenseProcessor(IWpfTextView view)
         {
@@ -26,7 +26,7 @@ namespace Meerkatalyst.Lonestar.EditorExtension.Interaction
 
         public static StepsIntellisenseProcessor Create(IWpfTextView view)
         {
-            return view.Properties.GetOrCreateSingletonProperty<StepsIntellisenseProcessor>(() => new StepsIntellisenseProcessor(view));
+            return view.Properties.GetOrCreateSingletonProperty(() => new StepsIntellisenseProcessor(view));
         }
 
         protected SnapshotSpan CreateSnapshotSpanForCurrentLine(ITextViewLine line)
