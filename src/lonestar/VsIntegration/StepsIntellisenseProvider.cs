@@ -5,11 +5,13 @@ using Microsoft.VisualStudio.Utilities;
 
 namespace Meerkatalyst.Lonestar.VsIntegration
 {
-    [Export(typeof(IWpfTextViewCreationListener))]
+    [Export(typeof(IKeyProcessorProvider))]
+    [Name("Steps Intellisense Processor")]
+    [Order(Before = "default")]
     [ContentType("text")]
     [FileExtension(".feature")]
     [TextViewRole(PredefinedTextViewRoles.Document)]
-    internal sealed class IntellisenseViewCreationListener : IWpfTextViewCreationListener
+    internal sealed class StepsIntellisenseProvider : IKeyProcessorProvider
     {
         [Export(typeof(AdornmentLayerDefinition))]
         [Name("StepsIntellisense")]
@@ -17,9 +19,9 @@ namespace Meerkatalyst.Lonestar.VsIntegration
         [TextViewRole(PredefinedTextViewRoles.Document)]
         private AdornmentLayerDefinition editorAdornmentLayer;
 
-        public void TextViewCreated(IWpfTextView textView)
+        public KeyProcessor GetAssociatedProcessor(IWpfTextView wpfTextView)
         {
-            new StepsIntellisense(textView);
+            return StepsIntellisenseProcessor.Create(wpfTextView);
         }
     }
 }
