@@ -14,13 +14,13 @@ namespace Meerkatalyst.Lonestar.EditorExtension.Interaction.Processors
         private bool justMovedCaret;
         private bool hasIntellisenseWindowOpen;
         private readonly IAdornmentLayer _layer;
-        private readonly Selection _intellisenseWindow;
+        private readonly IntelliSenseControl _intellisenseWindow;
 
         public StepsIntellisenseProcessor(IWpfTextView view)
         {
             _view = view;
             _layer = view.GetAdornmentLayer(AdornmentLayerNames.StepsIntellisense);
-            _intellisenseWindow = new Selection();
+            _intellisenseWindow = new IntelliSenseControl();
             _view.Caret.PositionChanged += Caret_PositionChanged;
         }
 

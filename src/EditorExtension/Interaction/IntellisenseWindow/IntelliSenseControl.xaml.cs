@@ -15,11 +15,11 @@ using System.Windows.Shapes;
 namespace Meerkatalyst.Lonestar.EditorExtension.Interaction.IntellisenseWindow
 {
     /// <summary>
-    /// Interaction logic for Selection.xaml
+    /// Interaction logic for IntelliSenseControl.xaml
     /// </summary>
-    public partial class Selection : UserControl
+    public partial class IntelliSenseControl : UserControl
     {
-        public Selection()
+        public IntelliSenseControl()
         {
             InitializeComponent();
         }
