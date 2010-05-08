@@ -14,20 +14,20 @@ namespace Meerkatalyst.Lonestar.EditorExtension.Interaction.IntellisenseWindow
             listBox1.Items.Add(text);
         }
 
-        public void ChangeSelection(HighlightedSelection selectedAction)
+        public void ChangeSelection(HighlightedSelectionAction selectedAction)
         {
             int selectedIndex = listBox1.SelectedIndex;
 
             switch (selectedAction)
             {
-                case HighlightedSelection.Up:
+                case HighlightedSelectionAction.Up:
                     if (selectedIndex == 0)
                         listBox1.SelectedIndex = (listBox1.Items.Count - 1);
 
                     listBox1.SelectedIndex--;
                     break;
 
-                case HighlightedSelection.Down:
+                case HighlightedSelectionAction.Down:
                     if (selectedIndex == (listBox1.Items.Count - 1))
                         listBox1.SelectedIndex = 0;
 

@@ -63,10 +63,10 @@ namespace Meerkatalyst.Lonestar.EditorExtension.Interaction.Processors
             switch (args.Key)
             {
                 case Key.Down:
-                    ChangeIntellisenseSelection(HighlightedSelection.Down);
+                    ChangeIntellisenseSelection(HighlightedSelectionAction.Down);
                     break;
                 case Key.Up:
-                    ChangeIntellisenseSelection(HighlightedSelection.Up);
+                    ChangeIntellisenseSelection(HighlightedSelectionAction.Up);
                     break;
                 case Key.Escape:
                     CloseIntellisenseWindow();
@@ -76,7 +76,7 @@ namespace Meerkatalyst.Lonestar.EditorExtension.Interaction.Processors
             args.Handled = true;
         }
 
-        private void ChangeIntellisenseSelection(HighlightedSelection selectedAction)
+        private void ChangeIntellisenseSelection(HighlightedSelectionAction selectedAction)
         {
             _intellisenseWindow.ChangeSelection(selectedAction);
         }

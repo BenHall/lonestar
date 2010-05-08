@@ -135,7 +135,7 @@
     <Compile Include="Interaction\IntellisenseWindow\IntelliSenseControl.xaml.cs">
       <DependentUpon>IntelliSenseControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Interaction\Processors\HighlightedSelection.cs" />
+    <Compile Include="Interaction\IntellisenseWindow\HighlightedSelectionAction.cs" />
     <Compile Include="Interaction\Providers\EditorHighlighterProvider.cs" />
     <Compile Include="Interaction\Providers\StepsIntellisenseProvider.cs" />
     <Compile Include="Interaction\StatusUpdateEventRaiser.cs" />
