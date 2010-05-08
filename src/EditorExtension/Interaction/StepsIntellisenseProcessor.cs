@@ -19,7 +19,7 @@ namespace Meerkatalyst.Lonestar.EditorExtension.Interaction
         public StepsIntellisenseProcessor(IWpfTextView view)
         {
             _view = view;
-            _layer = view.GetAdornmentLayer("StepsIntellisense");
+            _layer = view.GetAdornmentLayer(AdornmentLayerNames.StepsIntellisense);
             _intellisenseWindow = new Selection();
             _view.Caret.PositionChanged += Caret_PositionChanged;
         }

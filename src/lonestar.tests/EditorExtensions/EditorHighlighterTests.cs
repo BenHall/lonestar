@@ -16,7 +16,7 @@ namespace lonestar.tests.EditorExtensions
             IWpfTextView stubView = MockRepository.GenerateStub<IWpfTextView>();
             stubView.Stub(v => v.GetAdornmentLayer("EditorHighlighter")).Return(stubLayer);
 
-            EditorHighlighter editor = new EditorHighlighter(stubView);
+            EditorHighlighterProcessor editor = new EditorHighlighterProcessor(stubView);
             editor.HighlightFeatureFileWithResults(new List<FeatureResult>());
 
             stubLayer.AssertWasCalled(l => l.RemoveAdornmentsByTag("ResultMarker"));

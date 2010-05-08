@@ -14,7 +14,7 @@ namespace Meerkatalyst.Lonestar.VsIntegration
     internal sealed class StepsIntellisenseProvider : IKeyProcessorProvider
     {
         [Export(typeof(AdornmentLayerDefinition))]
-        [Name("StepsIntellisense")]
+        [Name(AdornmentLayerNames.StepsIntellisense)]
         [Order(After = PredefinedAdornmentLayers.Selection)]
         [TextViewRole(PredefinedTextViewRoles.Document)]
         private AdornmentLayerDefinition editorAdornmentLayer;

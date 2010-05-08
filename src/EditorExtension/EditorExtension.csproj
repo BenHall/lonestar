@@ -129,6 +129,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Execution\IResultsProvider.cs" />
+    <Compile Include="Interaction\AdornmentLayerNames.cs" />
     <Compile Include="Interaction\ExecutionController.cs" />
     <Compile Include="Execution\Cucumber.cs" />
     <Compile Include="Interaction\IntellisenseWindow\Selection.xaml.cs">
@@ -148,7 +149,7 @@
     <Compile Include="ResultAdapter\ResultModels\FeatureResult.cs" />
     <Compile Include="ResultAdapter\ResultModels\ScenarioResult.cs" />
     <Compile Include="ResultAdapter\ResultModels\StepResult.cs" />
-    <Compile Include="Interaction\EditorHighlighter.cs" />
+    <Compile Include="Interaction\EditorHighlighterProcessor.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Formatters\basic_info.rb">

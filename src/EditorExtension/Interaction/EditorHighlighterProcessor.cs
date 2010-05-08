@@ -10,16 +10,16 @@ using Microsoft.VisualStudio.Text.Formatting;
 
 namespace Meerkatalyst.Lonestar.EditorExtension.Interaction
 {
-    public sealed class EditorHighlighter : VsTextViewInteractions
+    public sealed class EditorHighlighterProcessor : VsTextViewInteractions
     {
         private const string RESULT_MARKER_LAYER = "ResultMarker";
         protected override IWpfTextView View { set; get; }
         protected override IAdornmentLayer Layer { get; set; }
 
-        public EditorHighlighter(IWpfTextView view)
+        public EditorHighlighterProcessor(IWpfTextView view)
         {
             View = view;
-            Layer = view.GetAdornmentLayer("EditorHighlighter");
+            Layer = view.GetAdornmentLayer(AdornmentLayerNames.EditorHighlighter);
         }
 
         public void HighlightFeatureFileWithResults(IEnumerable<FeatureResult> featureResults)

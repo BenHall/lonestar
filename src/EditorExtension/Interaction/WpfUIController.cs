@@ -11,8 +11,8 @@ namespace Meerkatalyst.Lonestar.EditorExtension.Interaction
         {
             if (wpfTextView == null) return;
             
-            EditorHighlighter editorHighlighter = new EditorHighlighter(wpfTextView);
-            editorHighlighter.HighlightFeatureFileWithResults(featureResults);
+            EditorHighlighterProcessor editorHighlighterProcessor = new EditorHighlighterProcessor(wpfTextView);
+            editorHighlighterProcessor.HighlightFeatureFileWithResults(featureResults);
         }
 
         public void UpdateStatusWithSummary(List<FeatureResult> featureResults)
