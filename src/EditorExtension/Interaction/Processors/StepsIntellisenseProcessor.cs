@@ -33,29 +33,8 @@ namespace Meerkatalyst.Lonestar.EditorExtension.Interaction.Processors
             if (!hasIntellisenseWindowOpen)
                 ShowIntellisenseWindow();
 
-            ITextViewLine line = GetCurrentLine();
-            _intellisenseWindow.HighlightItem(GetTextForLine(line));
+            _intellisenseWindow.HighlightItem(GetTextForLine(GetCurrentLine()));
             base.KeyDown(args);
-        }
-
-        private void ShowIntellisenseWindow()
-        {
-            Canvas.SetLeft(_intellisenseWindow, _view.ViewportRight - 300);
-            Canvas.SetTop(_intellisenseWindow, _view.ViewportTop + 300);
-            _layer.AddAdornment(AdornmentPositioningBehavior.ViewportRelative, null,null, _intellisenseWindow, null);
-            hasIntellisenseWindowOpen = true;
-        }
-
-        private string GetTextForLine(ITextViewLine line)
-        {
-            Span lineSpan = Span.FromBounds(line.Start, line.End);
-            var snapshotSpan = new SnapshotSpan(_view.TextSnapshot, lineSpan);
-            return snapshotSpan.GetText();
-        }
-
-        private ITextViewLine GetCurrentLine()
-        {
-            return _view.Caret.ContainingTextViewLine;
         }
 
         public override void KeyUp(KeyEventArgs args)
@@ -63,28 +42,89 @@ namespace Meerkatalyst.Lonestar.EditorExtension.Interaction.Processors
             switch (args.Key)
             {
                 case Key.Down:
-                    ChangeIntellisenseSelection(HighlightedSelectionAction.Down);
+                    ChangeIntellisenseSelectedItem(HighlightedSelectionAction.Down);
                     break;
                 case Key.Up:
-                    ChangeIntellisenseSelection(HighlightedSelectionAction.Up);
+                    ChangeIntellisenseSelectedItem(HighlightedSelectionAction.Up);
                     break;
+                case Key.Left:
+                case Key.Right:
                 case Key.Escape:
                     CloseIntellisenseWindow();
+                    break;
+                case Key.Enter:
+                    CompleteCurrentLineWithCurrentlySelectedLine();
+                    break;
+                default:
+                    if(args.Key >= Key.A && args.Key <= Key.Z || args.Key == Key.Back || args.Key == Key.Delete)
+                        UpdateIntellisense();
                     break;
             }
 
             args.Handled = true;
         }
 
-        private void ChangeIntellisenseSelection(HighlightedSelectionAction selectedAction)
+        private void ShowIntellisenseWindow()
+        {
+            lock (_layer)
+            {
+                Canvas.SetLeft(_intellisenseWindow, 15);
+                Canvas.SetTop(_intellisenseWindow, _view.Caret.Top + 15);
+                _layer.Opacity = 100;
+                _layer.AddAdornment(AdornmentPositioningBehavior.ViewportRelative, null, null, _intellisenseWindow, null);
+                hasIntellisenseWindowOpen = true;
+            }
+        }
+
+        private string GetTextForLine(ITextViewLine line)
+        {
+            SnapshotSpan snapshotSpan = GetSnapshotSpanForLine(line);            
+            return snapshotSpan.GetText();
+        }
+
+        private SnapshotSpan GetSnapshotSpanForLine(ITextViewLine line)
+        {
+            Span lineSpan = Span.FromBounds(line.Start, line.End);
+            return new SnapshotSpan(_view.TextSnapshot, lineSpan);
+        }
+
+        private ITextViewLine GetCurrentLine()
+        {
+            return _view.Caret.ContainingTextViewLine;
+        }
+
+        private void UpdateIntellisense()
+        {
+            if (!hasIntellisenseWindowOpen)
+                ShowIntellisenseWindow();
+
+            ITextViewLine line = GetCurrentLine();
+            _intellisenseWindow.HighlightItem(GetTextForLine(line));
+        }
+
+        private void CompleteCurrentLineWithCurrentlySelectedLine()
+        {
+            if(hasIntellisenseWindowOpen)
+            {
+                string selectedText = _intellisenseWindow.GetCurrentlySelectedItem();
+                //TODO: Move caret to previous line
+                //Replace line with selected text
+                CloseIntellisenseWindow();
+            }
+        }
+
+        private void ChangeIntellisenseSelectedItem(HighlightedSelectionAction selectedAction)
         {
             _intellisenseWindow.ChangeSelection(selectedAction);
         }
 
         private void CloseIntellisenseWindow()
         {
-            _layer.RemoveAdornment(_intellisenseWindow);
-            hasIntellisenseWindowOpen = false;
+            lock (_layer)
+            {
+                _layer.RemoveAdornment(_intellisenseWindow);
+                hasIntellisenseWindowOpen = false;
+            }
         }
 
         void ResetCaretIfIntellisenseWindowOpen(object sender, CaretPositionChangedEventArgs e)

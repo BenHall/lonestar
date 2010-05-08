@@ -4,12 +4,8 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" d:DesignHeight="149" d:DesignWidth="465">
-    <Grid Background="#FFE21717">
-        <ListBox Height="137" HorizontalAlignment="Left" Name="listBox1" VerticalAlignment="Top" Width="465">
-            <ListBoxItem Content="Item 1" />
-            <ListBoxItem Content="Item 2" />
-            <ListBoxItem Content="Item 3" />
-            <ListBoxItem Content="Item 4" />
+    <Border Background="#FF1B5277" BorderBrush="Black" BorderThickness="1">
+        <ListBox HorizontalAlignment="Left" Name="listBox1" VerticalAlignment="Top" Background="White" BorderThickness="1" BorderBrush="#FF030303" Width="465" Height="149">
         </ListBox>
-    </Grid>
+    </Border>
 </UserControl>

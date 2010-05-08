@@ -7,7 +7,6 @@ namespace Meerkatalyst.Lonestar.EditorExtension.Interaction.Providers
 {
     [Export(typeof(IKeyProcessorProvider))]
     [Name("Steps Intellisense Processor")]
-    [Order(Before = "default")]
     [ContentType("text")]
     [FileExtension(".feature")]
     [TextViewRole(PredefinedTextViewRoles.Document)]
@@ -15,7 +14,7 @@ namespace Meerkatalyst.Lonestar.EditorExtension.Interaction.Providers
     {
         [Export(typeof(AdornmentLayerDefinition))]
         [Name(AdornmentLayerNames.StepsIntellisense)]
-        [Order(After = PredefinedAdornmentLayers.Selection)]
+        [Order(After = PredefinedAdornmentLayers.Caret)]
         [TextViewRole(PredefinedTextViewRoles.Document)]
         private AdornmentLayerDefinition editorAdornmentLayer;
 
