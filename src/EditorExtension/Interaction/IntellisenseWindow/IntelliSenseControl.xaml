@@ -5,9 +5,11 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" d:DesignHeight="149" d:DesignWidth="465">
     <Grid Background="#FFE21717">
-        <ListBox Height="73" HorizontalAlignment="Left" Margin="28,13,0,0" Name="listBox1" VerticalAlignment="Top" Width="403">
+        <ListBox Height="137" HorizontalAlignment="Left" Name="listBox1" VerticalAlignment="Top" Width="465">
             <ListBoxItem Content="Item 1" />
+            <ListBoxItem Content="Item 2" />
+            <ListBoxItem Content="Item 3" />
+            <ListBoxItem Content="Item 4" />
         </ListBox>
-        <Label Content="Label" Height="28" HorizontalAlignment="Left" Margin="28,100,0,0" Name="label1" VerticalAlignment="Top" Width="403" />
     </Grid>
 </UserControl>

@@ -3,7 +3,6 @@ using System.Windows.Input;
 using Meerkatalyst.Lonestar.EditorExtension.Interaction.IntellisenseWindow;
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Editor;
-using System.Windows;
 using Microsoft.VisualStudio.Text.Formatting;
 
 namespace Meerkatalyst.Lonestar.EditorExtension.Interaction.Processors
@@ -21,7 +20,7 @@ namespace Meerkatalyst.Lonestar.EditorExtension.Interaction.Processors
             _view = view;
             _layer = view.GetAdornmentLayer(AdornmentLayerNames.StepsIntellisense);
             _intellisenseWindow = new IntelliSenseControl();
-            _view.Caret.PositionChanged += Caret_PositionChanged;
+            _view.Caret.PositionChanged += ResetCaretIfIntellisenseWindowOpen;
         }
 
         public static StepsIntellisenseProcessor Create(IWpfTextView view)
@@ -29,44 +28,66 @@ namespace Meerkatalyst.Lonestar.EditorExtension.Interaction.Processors
             return view.Properties.GetOrCreateSingletonProperty(() => new StepsIntellisenseProcessor(view));
         }
 
-        protected SnapshotSpan CreateSnapshotSpanForCurrentLine(ITextViewLine line)
-        {
-            Span lineSpan = Span.FromBounds(line.Start, line.End);
-            return new SnapshotSpan(_view.TextSnapshot, lineSpan);
-        }
-
         public override void KeyDown(KeyEventArgs args)
         {
             if (!hasIntellisenseWindowOpen)
-            {
-                Canvas.SetLeft(_intellisenseWindow, _view.ViewportRight - 300);
-                Canvas.SetTop(_intellisenseWindow, _view.ViewportTop + 300);
-                _layer.AddAdornment(AdornmentPositioningBehavior.ViewportRelative, null,null, _intellisenseWindow, null);
-                hasIntellisenseWindowOpen = true;
-            }
+                ShowIntellisenseWindow();
 
-            ITextViewLine line = _view.Caret.ContainingTextViewLine;
-            _intellisenseWindow.HighlightItem(CreateSnapshotSpanForCurrentLine(line).GetText());
+            ITextViewLine line = GetCurrentLine();
+            _intellisenseWindow.HighlightItem(GetTextForLine(line));
             base.KeyDown(args);
+        }
+
+        private void ShowIntellisenseWindow()
+        {
+            Canvas.SetLeft(_intellisenseWindow, _view.ViewportRight - 300);
+            Canvas.SetTop(_intellisenseWindow, _view.ViewportTop + 300);
+            _layer.AddAdornment(AdornmentPositioningBehavior.ViewportRelative, null,null, _intellisenseWindow, null);
+            hasIntellisenseWindowOpen = true;
+        }
+
+        private string GetTextForLine(ITextViewLine line)
+        {
+            Span lineSpan = Span.FromBounds(line.Start, line.End);
+            var snapshotSpan = new SnapshotSpan(_view.TextSnapshot, lineSpan);
+            return snapshotSpan.GetText();
+        }
+
+        private ITextViewLine GetCurrentLine()
+        {
+            return _view.Caret.ContainingTextViewLine;
         }
 
         public override void KeyUp(KeyEventArgs args)
         {
-            if (args.Key == Key.Down)
+            switch (args.Key)
             {
-                MessageBox.Show("Down");
-            }
-            if (args.Key == Key.Escape)
-            {
-                _layer.RemoveAdornment(_intellisenseWindow);
-                hasIntellisenseWindowOpen = false;
-                MessageBox.Show("Escape");
+                case Key.Down:
+                    ChangeIntellisenseSelection(HighlightedSelection.Down);
+                    break;
+                case Key.Up:
+                    ChangeIntellisenseSelection(HighlightedSelection.Up);
+                    break;
+                case Key.Escape:
+                    CloseIntellisenseWindow();
+                    break;
             }
 
             args.Handled = true;
         }
 
-        void Caret_PositionChanged(object sender, CaretPositionChangedEventArgs e)
+        private void ChangeIntellisenseSelection(HighlightedSelection selectedAction)
+        {
+            _intellisenseWindow.ChangeSelection(selectedAction);
+        }
+
+        private void CloseIntellisenseWindow()
+        {
+            _layer.RemoveAdornment(_intellisenseWindow);
+            hasIntellisenseWindowOpen = false;
+        }
+
+        void ResetCaretIfIntellisenseWindowOpen(object sender, CaretPositionChangedEventArgs e)
         {
             CaretPosition oldPosition = e.OldPosition;
 

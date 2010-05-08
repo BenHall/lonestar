@@ -1,23 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+﻿using Meerkatalyst.Lonestar.EditorExtension.Interaction.Processors;
 
 namespace Meerkatalyst.Lonestar.EditorExtension.Interaction.IntellisenseWindow
 {
-    /// <summary>
-    /// Interaction logic for IntelliSenseControl.xaml
-    /// </summary>
-    public partial class IntelliSenseControl : UserControl
+    public partial class IntelliSenseControl
     {
         public IntelliSenseControl()
         {
@@ -26,7 +11,29 @@ namespace Meerkatalyst.Lonestar.EditorExtension.Interaction.IntellisenseWindow
 
         public void HighlightItem(string text)
         {
-            label1.Content = text;
+            listBox1.Items.Add(text);
+        }
+
+        public void ChangeSelection(HighlightedSelection selectedAction)
+        {
+            int selectedIndex = listBox1.SelectedIndex;
+
+            switch (selectedAction)
+            {
+                case HighlightedSelection.Up:
+                    if (selectedIndex == 0)
+                        listBox1.SelectedIndex = (listBox1.Items.Count - 1);
+
+                    listBox1.SelectedIndex--;
+                    break;
+
+                case HighlightedSelection.Down:
+                    if (selectedIndex == (listBox1.Items.Count - 1))
+                        listBox1.SelectedIndex = 0;
+
+                    listBox1.SelectedIndex++;
+                    break;
+            }
         }
     }
 }
