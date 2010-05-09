@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Meerkatalyst.Lonestar.EditorExtension.Interaction.Processors;
 
 namespace Meerkatalyst.Lonestar.EditorExtension.Interaction.IntellisenseWindow
@@ -20,14 +19,13 @@ namespace Meerkatalyst.Lonestar.EditorExtension.Interaction.IntellisenseWindow
 
             foreach (StepDefinition item in listBox1.Items)
             {
-                if (item.ToString().StartsWith(text.Trim()) || item.ToString().StartsWith(substringOfText.Trim()))
+                if (item.CleanedName.StartsWith(text.Trim()) || item.CleanedName.StartsWith(substringOfText.Trim()))
                 {
                     listBox1.SelectedItem = item;
                     listBox1.ScrollIntoView(item);
                     return;
                 }
             }
-
 
             listBox1.SelectedIndex = -1;
         }
@@ -58,10 +56,10 @@ namespace Meerkatalyst.Lonestar.EditorExtension.Interaction.IntellisenseWindow
             }
         }
 
-        public string GetCurrentlySelectedItem()
+        public StepDefinition GetCurrentlySelectedItem()
         {
             var currentlySelectedItem = listBox1.SelectedItem as StepDefinition;
-            return currentlySelectedItem == null ? string.Empty : currentlySelectedItem.ToString();
+            return currentlySelectedItem;
         }
 
         public void UpdatePopulatedView(List<StepDefinition> intellisenseWindow)
