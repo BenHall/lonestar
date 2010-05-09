@@ -1,6 +1,8 @@
 using System.ComponentModel.Composition;
 using Meerkatalyst.Lonestar.EditorExtension.Interaction.Processors;
+using Microsoft.VisualStudio.Editor;
 using Microsoft.VisualStudio.Text.Editor;
+using Microsoft.VisualStudio.TextManager.Interop;
 using Microsoft.VisualStudio.Utilities;
 
 namespace Meerkatalyst.Lonestar.EditorExtension.Interaction.Providers
@@ -18,9 +20,12 @@ namespace Meerkatalyst.Lonestar.EditorExtension.Interaction.Providers
         [TextViewRole(PredefinedTextViewRoles.Document)]
         private AdornmentLayerDefinition editorAdornmentLayer;
 
+        [Import(typeof(IVsEditorAdaptersFactoryService))]
+        internal IVsEditorAdaptersFactoryService editorFactory = null;
+
         public KeyProcessor GetAssociatedProcessor(IWpfTextView wpfTextView)
         {
-            return StepsIntellisenseProcessor.Create(wpfTextView);
+            return StepsIntellisenseProcessor.Create(wpfTextView, editorFactory);
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Windows.Input;
 using Meerkatalyst.Lonestar.EditorExtension.Interaction.Processors;
 
 namespace Meerkatalyst.Lonestar.EditorExtension.Interaction.IntellisenseWindow
@@ -29,7 +30,7 @@ namespace Meerkatalyst.Lonestar.EditorExtension.Interaction.IntellisenseWindow
 
             listBox1.SelectedIndex = -1;
         }
-
+        
         public void ChangeSelection(HighlightedSelectionAction selectedAction)
         {
             int selectedIndex = listBox1.SelectedIndex;
