@@ -13,11 +13,16 @@ namespace Meerkatalyst.Lonestar.EditorExtension.Interaction.IntellisenseWindow
 
         public void HighlightItem(string text, double getCurrentCaratPosition)
         {
-            string substringOfText = text.Substring(0, Int32.Parse(getCurrentCaratPosition.ToString()));
+            string substringOfText = string.Empty;
+            string trimmedString = text.Trim();
+            int positionInString = Int32.Parse(getCurrentCaratPosition.ToString());
+
+            if (trimmedString.Length >= positionInString)
+                substringOfText = trimmedString.Substring(0, positionInString);
 
             foreach (StepDefinition item in listBox1.Items)
             {
-                if (item.ToString().StartsWith(text.Trim()) || item.ToString().StartsWith(substringOfText))
+                if (item.ToString().StartsWith(trimmedString) || item.ToString().StartsWith(substringOfText))
                 {
                     listBox1.SelectedItem = item;
                     listBox1.ScrollIntoView(item);

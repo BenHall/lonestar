@@ -136,6 +136,9 @@
       <DependentUpon>IntelliSenseControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Interaction\IntellisenseWindow\HighlightedSelectionAction.cs" />
+    <Compile Include="Interaction\Processors\NewStepsFoundHandlerArgs.cs" />
+    <Compile Include="Interaction\Processors\StepDefinition.cs" />
+    <Compile Include="Interaction\Processors\StepDefinitionFinder.cs" />
     <Compile Include="Interaction\Providers\EditorHighlighterProvider.cs" />
     <Compile Include="Interaction\Providers\StepsIntellisenseProvider.cs" />
     <Compile Include="Interaction\StatusUpdateEventRaiser.cs" />

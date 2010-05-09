@@ -59,12 +59,17 @@ namespace Meerkatalyst.Lonestar.EditorExtension.Interaction.Processors
                     CompleteCurrentLineWithCurrentlySelectedLine();
                     break;
                 default:
-                    if(args.Key >= Key.A && args.Key <= Key.Z || args.Key == Key.Back || args.Key == Key.Delete)
+                    if(ShouldUpdateIntellisense(args))
                         UpdateIntellisense();
                     break;
             }
 
             args.Handled = true;
+        }
+
+        private bool ShouldUpdateIntellisense(KeyEventArgs args)
+        {
+            return args.Key >= Key.A && args.Key <= Key.Z || args.Key == Key.Back || args.Key == Key.Delete || args.Key == Key.Space;
         }
 
         private void ShowIntellisenseWindow()
@@ -149,68 +154,4 @@ namespace Meerkatalyst.Lonestar.EditorExtension.Interaction.Processors
         }
 
     }
-
-    public class StepDefinition
-    {
-        public string GWTType { get; set; }
-        public string Name { get; set; }
-        public string File { get; set; }
-        public int LineNumber { get; set; }
-
-        public override string ToString()
-        {
-            return GWTType + " " + Name;
-        }
-    }
-
-    internal class StepDefinitionFinder
-    {
-        internal event NewStepsFoundHandler NewStepsFound;
-
-        public void ProcessSteps()
-        {
-            var stepDefinitions = new List<StepDefinition>
-                                      {
-                                          new StepDefinition
-                                              {
-                                                  GWTType = "Given",
-                                                  File = "local.rb",
-                                                  LineNumber = 123,
-                                                  Name = "Something like...."
-                                              },
-                                          new StepDefinition
-                                              {
-                                                  GWTType = "When",
-                                                  File = "local.rb",
-                                                  LineNumber = 80,
-                                                  Name = "Something like Or This"
-                                              },
-                                          new StepDefinition
-                                              {
-                                                  GWTType = "Then",
-                                                  File = "local.rb",
-                                                  LineNumber = 20,
-                                                  Name = "But not this"
-                                              }
-                                      };
-            RaiseNewStepsFound(stepDefinitions);
-        }
-
-        private void RaiseNewStepsFound(List<StepDefinition> stepDefinitions)
-        {
-            if (NewStepsFound == null)
-                return;
-
-            NewStepsFound(this, new NewStepsFoundHandlerArgs{NewDefinitions = stepDefinitions});
-        }
-    }
-
-    internal delegate void NewStepsFoundHandler(object sender, NewStepsFoundHandlerArgs args);
-
-    internal class NewStepsFoundHandlerArgs
-    {
-        public List<StepDefinition> NewDefinitions { get; set; }
-    }
 }
-
-
