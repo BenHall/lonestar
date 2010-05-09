@@ -63,9 +63,9 @@ namespace Meerkatalyst.Lonestar.EditorExtension.Interaction.IntellisenseWindow
             return currentlySelectedItem;
         }
 
-        public void UpdatePopulatedView(List<StepDefinition> intellisenseWindow)
+        public void UpdatePopulatedView(List<StepDefinition> stepDefinitions)
         {
-            foreach (var stepDefinition in intellisenseWindow)
+            foreach (var stepDefinition in stepDefinitions)
                 listBox1.Items.Add(stepDefinition);
         }
     }

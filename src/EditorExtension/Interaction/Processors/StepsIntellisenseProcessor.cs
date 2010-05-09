@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Windows.Controls;
 using System.Windows.Input;
 using Meerkatalyst.Lonestar.EditorExtension.Extensions;
@@ -55,7 +56,8 @@ namespace Meerkatalyst.Lonestar.EditorExtension.Interaction.Processors
 
         private void OnNewStepsFound(object sender, NewStepsFoundHandlerArgs args)
         {
-            _intellisenseWindow.UpdatePopulatedView(args.NewDefinitions);
+            IOrderedEnumerable<StepDefinition> stepDefinitions = args.NewDefinitions.OrderBy(x=>x.CleanedName, new GwtStringComparer());
+            _intellisenseWindow.UpdatePopulatedView(stepDefinitions.ToList());
         }
 
         public override void KeyUp(KeyEventArgs args)
