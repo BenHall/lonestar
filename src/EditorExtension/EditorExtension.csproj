@@ -129,6 +129,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Execution\IResultsProvider.cs" />
+    <Compile Include="Extensions\IWpfTextViewExtensions.cs" />
     <Compile Include="Interaction\AdornmentLayerNames.cs" />
     <Compile Include="Execution\ExecutionController.cs" />
     <Compile Include="Execution\Cucumber.cs" />

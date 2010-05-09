@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 
 namespace Meerkatalyst.Lonestar.EditorExtension.Interaction.Processors
 {
@@ -8,32 +9,29 @@ namespace Meerkatalyst.Lonestar.EditorExtension.Interaction.Processors
     {
         internal event NewStepsFoundHandler NewStepsFound;
 
-        public void ProcessSteps()
+        public void ProcessSteps(string getFilePath)
         {
-            var stepDefinitions = new List<StepDefinition>
-                                      {
-                                          new StepDefinition
-                                              {
-                                                  GWTType = "Given",
-                                                  File = "local.rb",
-                                                  LineNumber = 123,
-                                                  Name = "Something like...."
-                                              },
-                                          new StepDefinition
-                                              {
-                                                  GWTType = "When",
-                                                  File = "local.rb",
-                                                  LineNumber = 80,
-                                                  Name = "Something like Or This"
-                                              },
-                                          new StepDefinition
-                                              {
-                                                  GWTType = "Then",
-                                                  File = "local.rb",
-                                                  LineNumber = 20,
-                                                  Name = "But not this"
-                                              }
-                                      };
+            string directory = Path.GetDirectoryName(getFilePath);
+            string[] rubyFilesToScan = Directory.GetFiles(directory, "*.rb", SearchOption.AllDirectories);
+            var stepDefinitions = new List<StepDefinition>();
+
+            foreach (var stepFile in rubyFilesToScan)
+            {
+                string[] readAllLines = File.ReadAllLines(stepFile);
+                for (int index = 0; index < readAllLines.Length; index++)
+                {
+                    var readAllLine = readAllLines[index];
+                    string line = readAllLine.Trim();
+                    if (line.StartsWith("Given") || line.StartsWith("When") || line.StartsWith("Then"))
+                        stepDefinitions.Add(new StepDefinition
+                                                {
+                                                    File = Path.GetFileName(stepFile),
+                                                    LineNumber = index,
+                                                    Name = line
+                                                });
+                }
+            }
+
             RaiseNewStepsFound(stepDefinitions);
         }
 

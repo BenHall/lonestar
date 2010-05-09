@@ -1,7 +1,6 @@
-using System;
-using System.Collections.Generic;
 using System.Windows.Controls;
 using System.Windows.Input;
+using Meerkatalyst.Lonestar.EditorExtension.Extensions;
 using Meerkatalyst.Lonestar.EditorExtension.Interaction.IntellisenseWindow;
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Editor;
@@ -24,10 +23,9 @@ namespace Meerkatalyst.Lonestar.EditorExtension.Interaction.Processors
             _layer = view.GetAdornmentLayer(AdornmentLayerNames.StepsIntellisense);
             _intellisenseWindow = new IntelliSenseControl();
             _view.Caret.PositionChanged += ResetCaretIfIntellisenseWindowOpen;
-
             _finder = new StepDefinitionFinder();
             _finder.NewStepsFound += OnNewStepsFound;
-            _finder.ProcessSteps();
+            _finder.ProcessSteps(_view.GetFilePath());
         }
 
         private void OnNewStepsFound(object sender, NewStepsFoundHandlerArgs args)
@@ -39,7 +37,7 @@ namespace Meerkatalyst.Lonestar.EditorExtension.Interaction.Processors
         {
             return view.Properties.GetOrCreateSingletonProperty(() => new StepsIntellisenseProcessor(view));
         }
-        
+
         public override void KeyUp(KeyEventArgs args)
         {
             switch (args.Key)
@@ -110,9 +108,14 @@ namespace Meerkatalyst.Lonestar.EditorExtension.Interaction.Processors
             _intellisenseWindow.HighlightItem(GetTextForLine(line), GetCurrentCaratPosition());
         }
 
-        private double GetCurrentCaratPosition()
+        private int GetCurrentCaratPosition()
         {
-            return _view.Caret.ContainingTextViewLine.TextLeft;
+            int position = _view.Caret.Position.BufferPosition.Position;
+            ITextSnapshotLine lineNumberFromPosition =
+                _view.TextSnapshot.GetLineFromLineNumber(_view.TextSnapshot.GetLineNumberFromPosition(position));
+            int offset = position - lineNumberFromPosition.Start;
+
+            return offset;
         }
 
         private void CompleteCurrentLineWithCurrentlySelectedLine()

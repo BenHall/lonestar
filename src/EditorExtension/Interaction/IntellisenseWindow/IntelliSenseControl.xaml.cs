@@ -11,18 +11,16 @@ namespace Meerkatalyst.Lonestar.EditorExtension.Interaction.IntellisenseWindow
             InitializeComponent();
         }
 
-        public void HighlightItem(string text, double getCurrentCaratPosition)
+        public void HighlightItem(string text, int positionInString)
         {
             string substringOfText = string.Empty;
-            string trimmedString = text.Trim();
-            int positionInString = Int32.Parse(getCurrentCaratPosition.ToString());
 
-            if (trimmedString.Length >= positionInString)
-                substringOfText = trimmedString.Substring(0, positionInString);
+            if (text.Length >= positionInString)
+                substringOfText = text.Substring(0, positionInString);
 
             foreach (StepDefinition item in listBox1.Items)
             {
-                if (item.ToString().StartsWith(trimmedString) || item.ToString().StartsWith(substringOfText))
+                if (item.ToString().StartsWith(text.Trim()) || item.ToString().StartsWith(substringOfText.Trim()))
                 {
                     listBox1.SelectedItem = item;
                     listBox1.ScrollIntoView(item);
@@ -41,7 +39,7 @@ namespace Meerkatalyst.Lonestar.EditorExtension.Interaction.IntellisenseWindow
             switch (selectedAction)
             {
                 case HighlightedSelectionAction.Up:
-                    if (selectedIndex == 0)
+                    if (selectedIndex <= 0)
                         listBox1.SelectedIndex = (listBox1.Items.Count - 1);
                     else
                         listBox1.SelectedIndex = selectedIndex - 1;
