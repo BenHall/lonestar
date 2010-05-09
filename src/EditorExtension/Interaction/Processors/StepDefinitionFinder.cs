@@ -13,10 +13,7 @@ namespace Meerkatalyst.Lonestar.EditorExtension.Interaction.Processors
         public void ProcessSteps(string getFilePath)
         {
             BackgroundWorker worker = new BackgroundWorker();
-            worker.DoWork += (s,e) =>
-                                 {
-                                     e.Result = CreateStepsForAllFilesInPath(e.Argument.ToString());
-                                 };
+            worker.DoWork += (s,e) => { e.Result = CreateStepsForAllFilesInPath(e.Argument.ToString()); };
 
             worker.RunWorkerCompleted += (s, e) => RaiseNewStepsFound(e.Result as List<StepDefinition>);
             worker.RunWorkerAsync(getFilePath);
