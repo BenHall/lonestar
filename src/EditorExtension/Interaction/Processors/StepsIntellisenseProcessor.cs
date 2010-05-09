@@ -12,7 +12,7 @@ using Microsoft.VisualStudio.Text.Formatting;
 using Microsoft.VisualStudio.TextManager.Interop;
 
 namespace Meerkatalyst.Lonestar.EditorExtension.Interaction.Processors
-{
+{//TODO: Split this into correct reposabilities
     public class StepsIntellisenseProcessor : KeyProcessor
     {
         private readonly IWpfTextView _view;
@@ -21,10 +21,9 @@ namespace Meerkatalyst.Lonestar.EditorExtension.Interaction.Processors
         private bool hasIntellisenseWindowOpen;
         private readonly IAdornmentLayer _layer;
         private readonly IntelliSenseControl _intellisenseWindow;
-        readonly StepDefinitionFinder _finder;
-        IVsTextView vsTextView;
-        KeyBindingCommandFilter keyBindingCommandFilter;
-        
+        IVsTextView _vsTextView;
+        KeyBindingCommandFilter _keyBindingCommandFilter;
+
         public StepsIntellisenseProcessor(IWpfTextView view, IVsEditorAdaptersFactoryService editorFactory)
         {
             _view = view;
@@ -32,15 +31,26 @@ namespace Meerkatalyst.Lonestar.EditorExtension.Interaction.Processors
             _layer = view.GetAdornmentLayer(AdornmentLayerNames.StepsIntellisense);
             _intellisenseWindow = new IntelliSenseControl();
             _view.Caret.PositionChanged += ResetCaretIfIntellisenseWindowOpen;
-            _view.GotAggregateFocus +=_view_GotAggregateFocus;
-            _finder = new StepDefinitionFinder();
-            _finder.NewStepsFound += OnNewStepsFound;
-            _finder.ProcessSteps(_view.GetFilePath());    
+            _view.GotAggregateFocus +=GetVsTextView;
+            
+            FindAllSteps();
         }
 
-        private void _view_GotAggregateFocus(object sender, EventArgs e)
+        public static StepsIntellisenseProcessor Create(IWpfTextView view, IVsEditorAdaptersFactoryService editorFactory)
         {
-            vsTextView = _editorFactory.GetViewAdapter(_view);
+            return view.Properties.GetOrCreateSingletonProperty(() => new StepsIntellisenseProcessor(view, editorFactory));
+        }
+
+        private void FindAllSteps()
+        {
+            StepDefinitionFinder finder = new StepDefinitionFinder();
+            finder.NewStepsFound += OnNewStepsFound;
+            finder.ProcessSteps(_view.GetFilePath());
+        }
+
+        private void GetVsTextView(object sender, EventArgs e)
+        {
+            _vsTextView = _editorFactory.GetViewAdapter(_view);
         }
 
         private void OnNewStepsFound(object sender, NewStepsFoundHandlerArgs args)
@@ -48,11 +58,6 @@ namespace Meerkatalyst.Lonestar.EditorExtension.Interaction.Processors
             _intellisenseWindow.UpdatePopulatedView(args.NewDefinitions);
         }
 
-        public static StepsIntellisenseProcessor Create(IWpfTextView view, IVsEditorAdaptersFactoryService editorFactory)
-        {
-            return view.Properties.GetOrCreateSingletonProperty(() => new StepsIntellisenseProcessor(view, editorFactory));
-        }
-        
         public override void KeyUp(KeyEventArgs args)
         {
             switch (args.Key)
@@ -92,7 +97,7 @@ namespace Meerkatalyst.Lonestar.EditorExtension.Interaction.Processors
         {
             lock (_layer)
             {
-                AddCommandFilter(vsTextView);
+                AddKeyBindingFilter(_vsTextView);
                 Canvas.SetLeft(_intellisenseWindow, 15);
                 Canvas.SetTop(_intellisenseWindow, _view.Caret.Top + 15);
                 _layer.Opacity = 100;
@@ -101,17 +106,17 @@ namespace Meerkatalyst.Lonestar.EditorExtension.Interaction.Processors
             }
         }
 
-        private void AddCommandFilter(IVsTextView vsTextView)
+        private void AddKeyBindingFilter(IVsTextView vsTextView)
         {
             IOleCommandTarget next;
-            keyBindingCommandFilter = new KeyBindingCommandFilter(_view);
-            vsTextView.AddCommandFilter(keyBindingCommandFilter, out next);
-            keyBindingCommandFilter.OldFilter = next;
+            _keyBindingCommandFilter = new KeyBindingCommandFilter();
+            vsTextView.AddCommandFilter(_keyBindingCommandFilter, out next);
+            _keyBindingCommandFilter.OldFilter = next;
         }
 
-        private void RemoveCommandFilter(IVsTextView vsTextView)
+        private void RemoveKeyBindingFilter(IVsTextView vsTextView)
         {
-            vsTextView.RemoveCommandFilter(keyBindingCommandFilter);
+            vsTextView.RemoveCommandFilter(_keyBindingCommandFilter);
         }
 
         private string GetTextForLine(ITextViewLine line)
@@ -174,7 +179,7 @@ namespace Meerkatalyst.Lonestar.EditorExtension.Interaction.Processors
             {
                 _layer.RemoveAdornment(_intellisenseWindow);
                 hasIntellisenseWindowOpen = false;
-                RemoveCommandFilter(vsTextView);
+                RemoveKeyBindingFilter(_vsTextView);
             }
         }
 
@@ -191,38 +196,5 @@ namespace Meerkatalyst.Lonestar.EditorExtension.Interaction.Processors
                 justMovedCaret = false;
         }
 
-    }
-
-    internal class KeyBindingCommandFilter : IOleCommandTarget
-    {
-        private IWpfTextView m_textView;
-        internal IOleCommandTarget m_nextTarget;
-        internal bool m_added;
-        internal bool m_adorned;
-
-        public KeyBindingCommandFilter(IWpfTextView textView)
-        {
-            m_textView = textView;
-            m_adorned = false;
-        }
-
-        //http://www.hill30.com/MikeFeingoldBlog/index.php/2009/09/03/django-editor-in-vs-2010-part-6-code-completion-controller/
-        public IOleCommandTarget OldFilter { get; set; }
-
-        private static readonly Guid CMDSETID_StandardCommandSet2k = new Guid("1496a755-94de-11d0-8c3f-00c04fc2aae2");
-        private static readonly uint ECMD_RETURN = 3;
-
-        public int Exec(ref Guid pguidCmdGroup, uint nCmdID, uint nCmdexecopt, IntPtr pvaIn, IntPtr pvaOut)
-        {
-            if (pguidCmdGroup == CMDSETID_StandardCommandSet2k && nCmdID == ECMD_RETURN)
-                return 0;
-            
-            return OldFilter.Exec(pguidCmdGroup, nCmdID, nCmdexecopt, pvaIn, pvaOut);
-        }
-
-        public int QueryStatus(ref Guid pguidCmdGroup, uint cCmds, OLECMD[] prgCmds, IntPtr pCmdText)
-        {
-            return OldFilter.QueryStatus(pguidCmdGroup, cCmds, prgCmds, pCmdText);
-        }
     }
 }
