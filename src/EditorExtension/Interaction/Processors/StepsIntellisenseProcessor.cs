@@ -23,6 +23,7 @@ namespace Meerkatalyst.Lonestar.EditorExtension.Interaction.Processors
             _layer = view.GetAdornmentLayer(AdornmentLayerNames.StepsIntellisense);
             _intellisenseWindow = new IntelliSenseControl();
             _view.Caret.PositionChanged += ResetCaretIfIntellisenseWindowOpen;
+
             _finder = new StepDefinitionFinder();
             _finder.NewStepsFound += OnNewStepsFound;
             _finder.ProcessSteps(_view.GetFilePath());
