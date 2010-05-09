@@ -1,8 +1,13 @@
-) Execute all steps in a solution, not just active window
-) Display step failure information in an effective fashion
-) Intellisense for writing steps
-) Create steps based on text
-) Display results in a separate window
-) Support RSpec
-) Support Cuke4Nuke
-) Stream output instead of waiting until it has finished
+0.2
+	Intellisense for writing steps
+	Display step failure information in an effective fashion
+
+0.3
+	Create steps based on text
+	Display results in a separate window
+
+Nice to have:
+	Support RSpec
+	Support Cuke4Nuke
+	Support SpecFlow
+	Stream output instead of waiting until it has finished
