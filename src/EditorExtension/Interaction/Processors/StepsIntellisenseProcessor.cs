@@ -49,7 +49,8 @@ namespace Meerkatalyst.Lonestar.EditorExtension.Interaction.Processors
 
         private void GetVsTextView(object sender, EventArgs e)
         {
-            _vsTextView = _editorFactory.GetViewAdapter(_view);
+            if (_vsTextView == null)
+                _vsTextView = _editorFactory.GetViewAdapter(_view);
         }
 
         private void OnNewStepsFound(object sender, NewStepsFoundHandlerArgs args)
