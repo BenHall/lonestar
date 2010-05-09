@@ -162,9 +162,17 @@ namespace Meerkatalyst.Lonestar.EditorExtension.Interaction.Processors
                 StepDefinition currentlySelectedItem = _intellisenseWindow.GetCurrentlySelectedItem();
                 if (currentlySelectedItem != null)
                     ReplaceCurrentLineWithStep(currentlySelectedItem);
+                else
+                    InsertBlankLine();
 
                 CloseIntellisenseWindow();
             }
+        }
+
+        private void InsertBlankLine()
+        {
+            var textBuffer = _view.TextBuffer;
+            textBuffer.Insert(_view.Caret.Position.BufferPosition, "\r\n");
         }
 
         private void ReplaceCurrentLineWithStep(StepDefinition currentlySelectedItem)
@@ -205,6 +213,5 @@ namespace Meerkatalyst.Lonestar.EditorExtension.Interaction.Processors
             else
                 justMovedCaret = false;
         }
-
     }
 }
