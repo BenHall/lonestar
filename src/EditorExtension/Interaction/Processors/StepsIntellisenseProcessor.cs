@@ -164,11 +164,26 @@ namespace Meerkatalyst.Lonestar.EditorExtension.Interaction.Processors
             {
                 StepDefinition currentlySelectedItem = _intellisenseWindow.GetCurrentlySelectedItem();
                 if (currentlySelectedItem != null)
+                {
                     ReplaceCurrentLineWithStep(currentlySelectedItem);
+                    MoveCaretToFirstCapturePointOnCurrentLine();
+                }
                 else
                     InsertBlankLine();
 
                 CloseIntellisenseWindow();
+
+            }
+        }
+
+        private void MoveCaretToFirstCapturePointOnCurrentLine()
+        {
+            ITextSnapshotLine line = _view.TextSnapshot.GetLineFromPosition(_view.Caret.Position.BufferPosition);
+            int positionOfFirstQuote = line.GetText().IndexOf("\"");
+            if (positionOfFirstQuote > 0)
+            {
+                SnapshotPoint point = new SnapshotPoint(line.Snapshot, line.Start + (positionOfFirstQuote + 1));
+                _view.Caret.MoveTo(point);
             }
         }
 

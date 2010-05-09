@@ -51,12 +51,20 @@ namespace Meerkatalyst.Lonestar.EditorExtension.Interaction
                     
                 }
             }
-            string message = string.Format("Execution Result {0}. Passed {1}, Failed {2}, Pendiung {3}", (stepsFailed > 0 || stepsPending > 0) ? "passed" : "failed", stepsPassed, stepsFailed, stepsPending);
+            string message = string.Format("Execution Result {0}. Step Results - {1} passed, {2} failed, {3} pending", (stepsFailed > 0 || stepsPending > 0) ? "passed" : "failed", stepsPassed, stepsFailed, stepsPending);
 
             builder.AppendLine();
             builder.AppendLine(message);
             string summary = builder.ToString();
             OnUpdatedStatus(new StatusEventArgs{Message = message, Summary = summary});
+        }
+
+        public void ClearEditor(IWpfTextView wpfTextView)
+        {
+            if (wpfTextView == null) return;
+
+            EditorHighlighterProcessor editorHighlighterProcessor = new EditorHighlighterProcessor(wpfTextView);
+            editorHighlighterProcessor.RemoveLayer();
         }
     }
 }
