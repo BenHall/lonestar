@@ -39,16 +39,7 @@ namespace Meerkatalyst.Lonestar.EditorExtension.Interaction.Processors
         {
             return view.Properties.GetOrCreateSingletonProperty(() => new StepsIntellisenseProcessor(view));
         }
-
-        public override void KeyDown(KeyEventArgs args)
-        {
-            if (!hasIntellisenseWindowOpen)
-                ShowIntellisenseWindow();
-
-            _intellisenseWindow.HighlightItem(GetTextForLine(GetCurrentLine()));
-            base.KeyDown(args);
-        }
-
+        
         public override void KeyUp(KeyEventArgs args)
         {
             switch (args.Key)
@@ -111,7 +102,12 @@ namespace Meerkatalyst.Lonestar.EditorExtension.Interaction.Processors
                 ShowIntellisenseWindow();
 
             ITextViewLine line = GetCurrentLine();
-            _intellisenseWindow.HighlightItem(GetTextForLine(line));
+            _intellisenseWindow.HighlightItem(GetTextForLine(line), GetCurrentCaratPosition());
+        }
+
+        private double GetCurrentCaratPosition()
+        {
+            return _view.Caret.ContainingTextViewLine.TextLeft;
         }
 
         private void CompleteCurrentLineWithCurrentlySelectedLine()

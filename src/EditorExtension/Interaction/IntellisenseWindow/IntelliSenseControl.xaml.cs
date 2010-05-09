@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Meerkatalyst.Lonestar.EditorExtension.Interaction.Processors;
 
 namespace Meerkatalyst.Lonestar.EditorExtension.Interaction.IntellisenseWindow
@@ -10,17 +11,20 @@ namespace Meerkatalyst.Lonestar.EditorExtension.Interaction.IntellisenseWindow
             InitializeComponent();
         }
 
-        public void HighlightItem(string text)
+        public void HighlightItem(string text, double getCurrentCaratPosition)
         {
+            string substringOfText = text.Substring(0, Int32.Parse(getCurrentCaratPosition.ToString()));
+
             foreach (StepDefinition item in listBox1.Items)
             {
-                if (item.ToString().StartsWith(text.Trim()))
+                if (item.ToString().StartsWith(text.Trim()) || item.ToString().StartsWith(substringOfText))
                 {
                     listBox1.SelectedItem = item;
                     listBox1.ScrollIntoView(item);
                     return;
                 }
             }
+
 
             listBox1.SelectedIndex = -1;
         }
