@@ -1,5 +1,4 @@
 using System;
-using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using Meerkatalyst.Lonestar.EditorExtension.Extensions;
@@ -161,11 +160,22 @@ namespace Meerkatalyst.Lonestar.EditorExtension.Interaction.Processors
             if(hasIntellisenseWindowOpen)
             {
                 StepDefinition currentlySelectedItem = _intellisenseWindow.GetCurrentlySelectedItem();
-                MessageBox.Show(currentlySelectedItem.CleanedName);
-                //TODO: Move caret to previous line
-                //Replace line with selected text
+                if (currentlySelectedItem != null)
+                    ReplaceCurrentLineWithStep(currentlySelectedItem);
+
                 CloseIntellisenseWindow();
             }
+        }
+
+        private void ReplaceCurrentLineWithStep(StepDefinition currentlySelectedItem)
+        {
+            var textBuffer = _view.TextBuffer;
+
+            ITextViewLine line = GetCurrentLine();
+            Span lineSpan = Span.FromBounds(line.Start, line.End);
+
+            textBuffer.Delete(lineSpan);
+            textBuffer.Insert(line.Start, "   " + currentlySelectedItem.CleanedName);
         }
 
         private void ChangeIntellisenseSelectedItem(HighlightedSelectionAction selectedAction)

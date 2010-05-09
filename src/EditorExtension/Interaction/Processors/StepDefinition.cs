@@ -19,7 +19,7 @@
         {
             string nameWithoutDo = Name.Substring(0, Name.LastIndexOf("do"));
             string nameWithoutRegEx = nameWithoutDo.Replace("/^", "").Replace("$/", "");
-            return nameWithoutRegEx;
+            return nameWithoutRegEx.Trim();
         }
     }
 }
