@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using System.Windows.Controls;
 using System.Windows.Input;
 using Meerkatalyst.Lonestar.EditorExtension.Interaction.IntellisenseWindow;
@@ -14,6 +16,7 @@ namespace Meerkatalyst.Lonestar.EditorExtension.Interaction.Processors
         private bool hasIntellisenseWindowOpen;
         private readonly IAdornmentLayer _layer;
         private readonly IntelliSenseControl _intellisenseWindow;
+        readonly StepDefinitionFinder _finder;
 
         public StepsIntellisenseProcessor(IWpfTextView view)
         {
@@ -21,6 +24,15 @@ namespace Meerkatalyst.Lonestar.EditorExtension.Interaction.Processors
             _layer = view.GetAdornmentLayer(AdornmentLayerNames.StepsIntellisense);
             _intellisenseWindow = new IntelliSenseControl();
             _view.Caret.PositionChanged += ResetCaretIfIntellisenseWindowOpen;
+
+            _finder = new StepDefinitionFinder();
+            _finder.NewStepsFound += OnNewStepsFound;
+            _finder.ProcessSteps();
+        }
+
+        private void OnNewStepsFound(object sender, NewStepsFoundHandlerArgs args)
+        {
+            _intellisenseWindow.UpdatePopulatedView(args.NewDefinitions);
         }
 
         public static StepsIntellisenseProcessor Create(IWpfTextView view)
@@ -106,7 +118,7 @@ namespace Meerkatalyst.Lonestar.EditorExtension.Interaction.Processors
         {
             if(hasIntellisenseWindowOpen)
             {
-                string selectedText = _intellisenseWindow.GetCurrentlySelectedItem();
+                //string selectedText = _intellisenseWindow.GetCurrentlySelectedItem();
                 //TODO: Move caret to previous line
                 //Replace line with selected text
                 CloseIntellisenseWindow();
@@ -140,6 +152,68 @@ namespace Meerkatalyst.Lonestar.EditorExtension.Interaction.Processors
                 justMovedCaret = false;
         }
 
+    }
+
+    public class StepDefinition
+    {
+        public string GWTType { get; set; }
+        public string Name { get; set; }
+        public string File { get; set; }
+        public int LineNumber { get; set; }
+
+        public override string ToString()
+        {
+            return GWTType + " " + Name;
+        }
+    }
+
+    internal class StepDefinitionFinder
+    {
+        internal event NewStepsFoundHandler NewStepsFound;
+
+        public void ProcessSteps()
+        {
+            var stepDefinitions = new List<StepDefinition>
+                                      {
+                                          new StepDefinition
+                                              {
+                                                  GWTType = "Given",
+                                                  File = "local.rb",
+                                                  LineNumber = 123,
+                                                  Name = "Something like...."
+                                              },
+                                          new StepDefinition
+                                              {
+                                                  GWTType = "When",
+                                                  File = "local.rb",
+                                                  LineNumber = 80,
+                                                  Name = "Something like Or This"
+                                              },
+                                          new StepDefinition
+                                              {
+                                                  GWTType = "Then",
+                                                  File = "local.rb",
+                                                  LineNumber = 20,
+                                                  Name = "But not this"
+                                              }
+                                      };
+            RaiseNewStepsFound(stepDefinitions);
+        }
+
+        private void RaiseNewStepsFound(List<StepDefinition> stepDefinitions)
+        {
+            if (NewStepsFound == null)
+                return;
+
+            NewStepsFound(this, new NewStepsFoundHandlerArgs{NewDefinitions = stepDefinitions});
+        }
+    }
+
+    internal delegate void NewStepsFoundHandler(object sender, NewStepsFoundHandlerArgs args);
+
+    internal class NewStepsFoundHandlerArgs
+    {
+        public List<StepDefinition> NewDefinitions { get; set; }
     }
 }
 

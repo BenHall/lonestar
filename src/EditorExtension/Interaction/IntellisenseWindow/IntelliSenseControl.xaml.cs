@@ -1,4 +1,7 @@
-﻿namespace Meerkatalyst.Lonestar.EditorExtension.Interaction.IntellisenseWindow
+﻿using System.Collections.Generic;
+using Meerkatalyst.Lonestar.EditorExtension.Interaction.Processors;
+
+namespace Meerkatalyst.Lonestar.EditorExtension.Interaction.IntellisenseWindow
 {
     public partial class IntelliSenseControl
     {
@@ -9,9 +12,17 @@
 
         public void HighlightItem(string text)
         {
-            listBox1.Items.Add(text);
-            listBox1.SelectedItem = text;
-            listBox1.ScrollIntoView(text);
+            foreach (StepDefinition item in listBox1.Items)
+            {
+                if (item.ToString().StartsWith(text.Trim()))
+                {
+                    listBox1.SelectedItem = item;
+                    listBox1.ScrollIntoView(item);
+                    return;
+                }
+            }
+
+            listBox1.SelectedIndex = -1;
         }
 
         public void ChangeSelection(HighlightedSelectionAction selectedAction)
@@ -42,7 +53,14 @@
 
         public string GetCurrentlySelectedItem()
         {
-            return listBox1.SelectedItem as string;
+            var currentlySelectedItem = listBox1.SelectedItem as StepDefinition;
+            return currentlySelectedItem == null ? string.Empty : currentlySelectedItem.ToString();
+        }
+
+        public void UpdatePopulatedView(List<StepDefinition> intellisenseWindow)
+        {
+            foreach (var stepDefinition in intellisenseWindow)
+                listBox1.Items.Add(stepDefinition);
         }
     }
 }
