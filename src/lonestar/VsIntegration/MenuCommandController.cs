@@ -32,15 +32,12 @@ namespace Meerkatalyst.Lonestar.VsIntegration
             try
             {
                 ActiveWindowManager activeWindowManager = new ActiveWindowManager(_package);
-                string path = activeWindowManager.GetPathToActiveDocument();
-
-                ClearUI(activeWindowManager);
 
                 BackgroundWorker worker = new BackgroundWorker();
-                worker.DoWork += (s, args) => args.Result = ExecuteOnThread(path, activeWindowManager);
+                worker.DoWork += ExecuteOnThread;
                 worker.RunWorkerCompleted += (o, args) => UpdateUI(args.Result as List<FeatureResult>, activeWindowManager);
 
-                worker.RunWorkerAsync();
+                worker.RunWorkerAsync(activeWindowManager.GetPathToActiveDocument());
             }
             catch (Exception ex)
             {
@@ -53,26 +50,18 @@ namespace Meerkatalyst.Lonestar.VsIntegration
             try
             {
                 ActiveWindowManager activeWindowManager = new ActiveWindowManager(_package);
-                string path = Path.Combine(activeWindowManager.GetPathToSolution(), "features");
-
-                ClearUI(activeWindowManager);
 
                 BackgroundWorker worker = new BackgroundWorker();
-                worker.DoWork += (s,args) => args.Result = ExecuteOnThread(path, activeWindowManager);
-                worker.RunWorkerCompleted += (o, args) => UpdateUI(args.Result as List<FeatureResult>, activeWindowManager);
+                worker.DoWork += ExecuteOnThread;
+                worker.RunWorkerCompleted +=
+                    (o, args) => UpdateUI(args.Result as List<FeatureResult>, activeWindowManager);
 
-                worker.RunWorkerAsync();
+                worker.RunWorkerAsync(Path.Combine(activeWindowManager.GetPathToSolution(), "features"));
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message, "Error");
             }
-        }
-
-        private void ClearUI(ActiveWindowManager activeWindowManager)
-        {
-            WpfUIStatusUpdater uiStatusUpdater = new WpfUIStatusUpdater();
-            uiStatusUpdater.ClearEditor(activeWindowManager.GetActiveView());
         }
 
         private void UpdateUI(List<FeatureResult> featureResults, ActiveWindowManager activeWindowManager)
@@ -84,13 +73,15 @@ namespace Meerkatalyst.Lonestar.VsIntegration
             _statusController.UpdateListsWithResults(featureResults);
         }
 
-        private List<FeatureResult> ExecuteOnThread(string activeDocument, ActiveWindowManager activeWindowManager)
+        private void ExecuteOnThread(object sender, DoWorkEventArgs args)
         {
+            var activeDocument = args.Argument as string;
+
             ExecutionController executionController = new ExecutionController();
             executionController.UpdatedStatus += UpdateStatus;
             List<FeatureResult> featureResults = executionController.Execute(activeDocument);
 
-            return featureResults;
+            args.Result = featureResults;
         }
 
         private void UpdateStatus(object sender, StatusEventArgs e)

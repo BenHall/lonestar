@@ -13,7 +13,7 @@ namespace Meerkatalyst.Lonestar.EditorExtension.Interaction.Providers
     {
         [Export(typeof(AdornmentLayerDefinition))]
         [Name(AdornmentLayerNames.EditorHighlighter)]
-        [Order(Before = PredefinedAdornmentLayers.Selection)]
+        [Order(After = PredefinedAdornmentLayers.Selection)]
         [TextViewRole(PredefinedTextViewRoles.Document)] 
         private AdornmentLayerDefinition editorAdornmentLayer;
 

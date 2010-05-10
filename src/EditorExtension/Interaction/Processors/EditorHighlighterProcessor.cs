@@ -24,7 +24,7 @@ namespace Meerkatalyst.Lonestar.EditorExtension.Interaction.Processors
 
         public void HighlightFeatureFileWithResults(IEnumerable<FeatureResult> featureResults)
         {
-            RemoveLayer();
+            Layer.RemoveAdornmentsByTag(RESULT_MARKER_LAYER);
             foreach (FeatureResult featureResult in featureResults)
             {
                 foreach (ScenarioResult scenarioResult in featureResult.ScenarioResults)
@@ -32,11 +32,6 @@ namespace Meerkatalyst.Lonestar.EditorExtension.Interaction.Processors
                     HighlightUIWithResults(scenarioResult);
                 }
             }
-        }
-
-        public void RemoveLayer()
-        {
-            Layer.RemoveAdornmentsByTag(RESULT_MARKER_LAYER);
         }
 
         private void HighlightUIWithResults(ScenarioResult scenarioResult)
@@ -85,3 +80,5 @@ namespace Meerkatalyst.Lonestar.EditorExtension.Interaction.Processors
         }
     }
 }
+
+
