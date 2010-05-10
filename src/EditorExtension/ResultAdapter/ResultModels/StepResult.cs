@@ -5,6 +5,10 @@
         public string Name { get; set; }
         public string ResultText { get; set; }
 
+        //TODO: These should be sub-classes
+        public string Exception { get; set; }
+        public string StackTrace { get; set; }
+
         public Result Result
         {
             get

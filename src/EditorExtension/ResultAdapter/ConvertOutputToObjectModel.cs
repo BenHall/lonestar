@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Text;
 using System.Text.RegularExpressions;
 using Meerkatalyst.Lonestar.EditorExtension.ResultAdapter.ResultModels;
 
@@ -57,6 +58,25 @@ namespace Meerkatalyst.Lonestar.EditorExtension.ResultAdapter
             StepResult stepResult = new StepResult();
             stepResult.Name = lines[++index].Trim();
             stepResult.ResultText = lines[++index].Trim();
+
+            if (stepResult.Result == Result.Failed || stepResult.Result == Result.Pending)
+            {
+                string exceptionInformation = lines[++index];
+                if (exceptionInformation.StartsWith("  "))
+                {
+                    string[] exceptionDetails = exceptionInformation.Split('|');
+                    stepResult.Exception = exceptionDetails[0].Trim() + " " + exceptionDetails[1].Trim();
+
+                    StringBuilder builder = new StringBuilder();
+                    for (int i = 2; i < exceptionDetails.Length; i++)
+                    {
+                        builder.AppendLine(exceptionDetails[i].Trim());
+                    }
+
+                    stepResult.StackTrace = builder.ToString();
+                }
+            }
+
             return stepResult;
         }
     }
