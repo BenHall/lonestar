@@ -9,14 +9,15 @@ using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 using System.Windows.Forms;
+using Microsoft.VisualStudio.Text.Editor;
 
 namespace Meerkatalyst.Lonestar.VsIntegration
 {
     public class MenuCommandController
     {
-        private Package _package;
-        StatusController _statusController;
-
+        private readonly Package _package;
+        readonly StatusController _statusController;
+        
         public MenuCommandController(Package package)
         {
             _package = package;
@@ -32,6 +33,8 @@ namespace Meerkatalyst.Lonestar.VsIntegration
             try
             {
                 ActiveWindowManager activeWindowManager = new ActiveWindowManager(_package);
+
+                ClearUI(activeWindowManager.GetActiveView());
 
                 BackgroundWorker worker = new BackgroundWorker();
                 worker.DoWork += ExecuteOnThread;
@@ -50,6 +53,8 @@ namespace Meerkatalyst.Lonestar.VsIntegration
             try
             {
                 ActiveWindowManager activeWindowManager = new ActiveWindowManager(_package);
+                
+                ClearUI(activeWindowManager.GetActiveView());
 
                 BackgroundWorker worker = new BackgroundWorker();
                 worker.DoWork += ExecuteOnThread;
@@ -62,6 +67,13 @@ namespace Meerkatalyst.Lonestar.VsIntegration
             {
                 MessageBox.Show(ex.Message, "Error");
             }
+        }
+
+        private void ClearUI(IWpfTextView wpfTextView)
+        {
+            IAdornmentLayer adornmentLayer = wpfTextView.GetAdornmentLayer(AdornmentLayerNames.EditorHighlighter);
+            if (adornmentLayer != null) 
+                adornmentLayer.RemoveAdornmentsByTag(AdornmentLayerTags.ResultMarker);
         }
 
         private void UpdateUI(List<FeatureResult> featureResults, ActiveWindowManager activeWindowManager)

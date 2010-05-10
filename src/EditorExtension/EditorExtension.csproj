@@ -138,6 +138,7 @@
       <DependentUpon>IntelliSenseControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Interaction\IntellisenseWindow\HighlightedSelectionAction.cs" />
+    <Compile Include="Interaction\AdornmentLayerTags.cs" />
     <Compile Include="Interaction\Processors\GwtStringComparer.cs" />
     <Compile Include="Interaction\Processors\KeyBindingCommandFilter.cs" />
     <Compile Include="Interaction\Processors\NewStepsFoundHandlerArgs.cs" />

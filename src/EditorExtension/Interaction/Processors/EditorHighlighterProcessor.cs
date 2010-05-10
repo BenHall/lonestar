@@ -12,7 +12,6 @@ namespace Meerkatalyst.Lonestar.EditorExtension.Interaction.Processors
 {
     public sealed class EditorHighlighterProcessor : VsTextViewInteractions
     {
-        private const string RESULT_MARKER_LAYER = "ResultMarker";
         protected override IWpfTextView View { set; get; }
         protected override IAdornmentLayer Layer { get; set; }
 
@@ -24,7 +23,7 @@ namespace Meerkatalyst.Lonestar.EditorExtension.Interaction.Processors
 
         public void HighlightFeatureFileWithResults(IEnumerable<FeatureResult> featureResults)
         {
-            Layer.RemoveAdornmentsByTag(RESULT_MARKER_LAYER);
+            Layer.RemoveAdornmentsByTag(AdornmentLayerTags.ResultMarker);
             foreach (FeatureResult featureResult in featureResults)
             {
                 foreach (ScenarioResult scenarioResult in featureResult.ScenarioResults)
@@ -64,7 +63,7 @@ namespace Meerkatalyst.Lonestar.EditorExtension.Interaction.Processors
                 Canvas.SetLeft(highlight, geometry.Bounds.Left);
                 Canvas.SetTop(highlight, geometry.Bounds.Top);
 
-                Layer.AddAdornment(AdornmentPositioningBehavior.TextRelative, line, RESULT_MARKER_LAYER, highlight, null);
+                Layer.AddAdornment(AdornmentPositioningBehavior.TextRelative, line, AdornmentLayerTags.ResultMarker, highlight, null);
             }
         }
 
@@ -80,5 +79,3 @@ namespace Meerkatalyst.Lonestar.EditorExtension.Interaction.Processors
         }
     }
 }
-
-
