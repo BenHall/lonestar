@@ -18,6 +18,14 @@ module Meerkatalyst
 		puts "after_step_result"
     	puts step_match.format_args(lambda{|param| "#{param}"})
 		puts status
+		if(status == :failed || status == :pending)
+		  puts exception
+		  print_exception exception, status
+		end
+      end
+
+	  def print_exception(e, status)
+        puts("#{e.message} (#{e.class})\n#{e.backtrace.join("\n")}".indent(2))
       end
 
 	  def after_feature(feature)

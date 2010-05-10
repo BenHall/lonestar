@@ -15,7 +15,7 @@ When /^the "([^\"]*)" step is not implemented$/ do |arg1|
 end
 
 Then /^it should go yellow$/ do
-  pending
+  pending "Still to be done"
 end
 
 When /^"([^\"]*)" fails$/ do |arg1|

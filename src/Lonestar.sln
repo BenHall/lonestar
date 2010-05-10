@@ -10,8 +10,14 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "lonestar.tests", "lonestar.tests\lonestar.tests.csproj", "{3AF7B1EB-A163-4992-A357-7AAD34E20727}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "examples", "examples", "{9AE2F26E-01A1-476D-9FD4-9088AA136D9E}"
+	ProjectSection(SolutionItems) = preProject
+		..\example\hello_world.feature = ..\example\hello_world.feature
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "step_definitions", "step_definitions", "{105587D4-0570-4DB6-AE6C-EB25A4A4BB73}"
+	ProjectSection(SolutionItems) = preProject
+		..\example\step_definitions\steps.rb = ..\example\step_definitions\steps.rb
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{A2962C1A-83BA-4437-8C33-0E62778B0267}"
 	ProjectSection(SolutionItems) = preProject
