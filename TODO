@@ -1,5 +1,7 @@
 0.2
 	Display step failure information in an effective fashion
+	Write tests and make code consistent
+	Performance improvements around identifying results - too many foreach statements
 
 0.3
 	Create steps based on text
