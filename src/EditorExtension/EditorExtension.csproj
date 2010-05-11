@@ -139,6 +139,9 @@
     </Compile>
     <Compile Include="Interaction\IntellisenseWindow\HighlightedSelectionAction.cs" />
     <Compile Include="Interaction\AdornmentLayerTags.cs" />
+    <Compile Include="Interaction\OverlayDetails\DetailsControl.xaml.cs">
+      <DependentUpon>DetailsControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Interaction\Processors\GwtStringComparer.cs" />
     <Compile Include="Interaction\Processors\KeyBindingCommandFilter.cs" />
     <Compile Include="Interaction\Processors\NewStepsFoundHandlerArgs.cs" />
@@ -172,6 +175,10 @@
   </ItemGroup>
   <ItemGroup>
     <Page Include="Interaction\IntellisenseWindow\IntelliSenseControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Interaction\OverlayDetails\DetailsControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

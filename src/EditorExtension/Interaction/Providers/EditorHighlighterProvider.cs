@@ -15,7 +15,13 @@ namespace Meerkatalyst.Lonestar.EditorExtension.Interaction.Providers
         [Name(AdornmentLayerNames.EditorHighlighter)]
         [Order(Before = PredefinedAdornmentLayers.Selection)]
         [TextViewRole(PredefinedTextViewRoles.Document)] 
-        public AdornmentLayerDefinition EditorAdornmentLayer;
+        private AdornmentLayerDefinition highlighterEditorAdornmentLayer;
+
+        [Export(typeof(AdornmentLayerDefinition))]
+        [Name(AdornmentLayerNames.DetailsLayer)]
+        [Order(After = PredefinedAdornmentLayers.Caret)]
+        [TextViewRole(PredefinedTextViewRoles.Document)]
+        private AdornmentLayerDefinition detailsEditorAdornmentLayer;
 
         public void TextViewCreated(IWpfTextView textView)
         {

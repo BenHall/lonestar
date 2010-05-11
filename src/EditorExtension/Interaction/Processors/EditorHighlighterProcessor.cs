@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 using System.Linq;
-using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using Meerkatalyst.Lonestar.EditorExtension.Interaction.OverlayDetails;
 using Meerkatalyst.Lonestar.EditorExtension.LineResultMarkers;
 using Meerkatalyst.Lonestar.EditorExtension.ResultAdapter.ResultModels;
 using Microsoft.VisualStudio.Text;
@@ -14,6 +14,7 @@ namespace Meerkatalyst.Lonestar.EditorExtension.Interaction.Processors
     public sealed class EditorHighlighterProcessor : VsTextViewInteractions
     {
         private IEnumerable<FeatureResult> _featureResults;
+        private readonly IAdornmentLayer _detailsLayer;
         protected override IWpfTextView View { set; get; }
         protected override IAdornmentLayer Layer { get; set; }
 
@@ -21,28 +22,56 @@ namespace Meerkatalyst.Lonestar.EditorExtension.Interaction.Processors
         {
             View = view;
             Layer = view.GetAdornmentLayer(AdornmentLayerNames.EditorHighlighter);
-            View.MouseHover += new System.EventHandler<MouseHoverEventArgs>(View_MouseHover);
+            _detailsLayer = view.GetAdornmentLayer(AdornmentLayerNames.DetailsLayer);
+            View.MouseHover += View_MouseHover;
         }
 
         void View_MouseHover(object sender, MouseHoverEventArgs e)
         {
+            HideDetailsLayer();
             if(_featureResults == null)
                 return;
             
             ITextSnapshotLine textSnapshotLine = e.View.TextSnapshot.GetLineFromPosition(e.Position);
             string step = textSnapshotLine.GetText();
-
-            IEnumerable<StepResult> result = from featureResult in _featureResults
-                                                from scenarioResult in featureResult.ScenarioResults
-                                                from stepResult in scenarioResult.StepResults
-                                                where step.EndsWith(stepResult.Name)
-                                                select stepResult;
+            
+            IEnumerable<StepResult> result = FindStepsWithName(step);
 
             foreach (var stepResult in result)
             {
-                if (stepResult.Result == Result.Pending || stepResult.Result == Result.Failed)
-                    MessageBox.Show(stepResult.Exception);
+                if (ShouldDisplayDetailsOverlay(stepResult))
+                    DisplayDetailsOverlay(stepResult);
             }
+        }
+
+        private bool ShouldDisplayDetailsOverlay(StepResult stepResult)
+        {
+            return stepResult.Result == Result.Pending || stepResult.Result == Result.Failed;
+        }
+
+        private void HideDetailsLayer()
+        {
+            _detailsLayer.RemoveAdornmentsByTag(AdornmentLayerTags.DetailsOverlay);
+        }
+
+        private void DisplayDetailsOverlay(StepResult stepResult)
+        {
+            var details = new DetailsControl();
+            details.SetStepDetails(stepResult);
+
+            Canvas.SetLeft(details, 40);
+            Canvas.SetTop(details, 40);
+
+            _detailsLayer.AddAdornment(AdornmentPositioningBehavior.ViewportRelative, null, AdornmentLayerTags.DetailsOverlay, details, null);
+        }
+
+        private IEnumerable<StepResult> FindStepsWithName(string name)
+        {
+            return from featureResult in _featureResults
+                   from scenarioResult in featureResult.ScenarioResults
+                   from stepResult in scenarioResult.StepResults
+                   where name.EndsWith(stepResult.Name)
+                   select stepResult;
         }
 
         public void HighlightFeatureFileWithResults(IEnumerable<FeatureResult> featureResults)
